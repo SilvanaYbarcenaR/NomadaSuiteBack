@@ -5,6 +5,6 @@ const servicesSchema = new mongoose.Schema({
   quantity: Number,
 });
 
-const services = mongoose.model('services', servicesSchema);
+const Services = mongoose.model('Services', servicesSchema);
 
-module.exports = services;
+module.exports = Services;
