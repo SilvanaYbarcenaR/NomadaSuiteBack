@@ -5,9 +5,12 @@ const accommodationSchema = new mongoose.Schema({
   ownerId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User' }, 
-  idAmenitiesCategories: [
-    { type: mongoose.Schema.Types.ObjectId, 
-        ref: 'AmenitiesCategories' }], 
+    idServices: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Services'
+      }
+    ], 
   photos: [String], 
   idLocation: { 
     type: mongoose.Schema.Types.ObjectId, 

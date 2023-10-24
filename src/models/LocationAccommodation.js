@@ -8,6 +8,7 @@ const locationAccommodationSchema = new mongoose.Schema({
   country: String,
   zipCode: String,
   address: String,
+  coordinates: String,
 });
 
 const LocationAccommodation = mongoose.model('LocationAccommodation', locationAccommodationSchema);

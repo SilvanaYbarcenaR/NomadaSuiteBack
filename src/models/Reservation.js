@@ -5,7 +5,7 @@ const reservationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Accommodation' }, 
   totalPrice: Number,
-  monthsReserved: Number, // De 1 a 12
+  daysReserved: Number, //mínimo 30
   entryDate: Date,
   departureDate: Date,
 });
