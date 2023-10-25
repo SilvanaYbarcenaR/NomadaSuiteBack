@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Accommodation = require('../src/models/Accommodation');
 const LocationAccommodation = require('../src/models/LocationAccommodation');
-const Services = require('../src/models/Services ');
+const Services = require('../src/models/Services');
 const data_accommodations = require('./data_accommodation');
 const data_location = require('./data_location');
 const data_services = require('./data_services');

@@ -1,4 +1,6 @@
-const Accommodation = require('../../models/Accommodation'); 
+const Accommodation = require('../../models/Accommodation');
+const Services = require('../../models/Services');
+const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const getAccommodations = async (req, res) => {
   try {
@@ -14,6 +16,4 @@ const getAccommodations = async (req, res) => {
   }
 };
 
-module.exports =  getAccommodations
-
-
+module.exports = getAccommodations;
