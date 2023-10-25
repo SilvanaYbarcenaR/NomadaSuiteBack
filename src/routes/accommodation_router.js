@@ -4,4 +4,5 @@ const { getAccommodations } = require('../controllers/index');
 
 accommodationRouter.get('/', getAccommodations);
 
-module.exports = {accommodationRouter};
+module.exports = {
+    accommodationRouter};

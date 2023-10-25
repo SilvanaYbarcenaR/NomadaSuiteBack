@@ -1,4 +1,4 @@
-const dataAccommodations = [
+const data_accommodations = [
     {
       name: "Apartamento Acogedor en el Centro",
       photos: [
