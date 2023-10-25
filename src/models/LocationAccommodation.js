@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const locationAccommodationSchema = new mongoose.Schema({
-  idAccommodation: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Accommodation' }, 
+  idAccommodation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Accommodation'
+  },
   city: String,
   country: String,
   zipCode: String,
