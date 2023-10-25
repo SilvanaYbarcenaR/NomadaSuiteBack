@@ -82,3 +82,4 @@ const data_accommodations = [
       }
   ];
   
+module.exports = data_accommodations 

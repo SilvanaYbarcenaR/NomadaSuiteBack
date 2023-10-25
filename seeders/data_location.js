@@ -69,39 +69,41 @@ const data_location = [
         address: "Avenida Paulista 1000",
         coordinates: "-23.559527, -46.653442"
     },
-    {
-        city: "Buenos Aires",
-        country: "Argentina",
-        zipCode: "C1011AAA",
-        address: "Av. 9 de Julio 701",
-        coordinates: "-34.604750, -58.393531"
-    },
-    {
-        city: "Belo Horizonte",
-        country: "Brazil",
-        zipCode: "30170-917",
-        address: "Avenida Amazonas 115",
-        coordinates: "-19.922292, -43.941375"
-    },
-    {
-        city: "Santiago de Chile",
-        country: "Chile",
-        zipCode: "7500000",
-        address: "Plaza de Armas 444",
-        coordinates: "-33.448830, -70.650732"
-    },
-    {
-        city: "Montevideo",
-        country: "Uruguay",
-        zipCode: "11000",
-        address: "18 de Julio 1360",
-        coordinates: "-34.903282, -56.186903"
-    },
-    {
-        city: "Quito",
-        country: "Ecuador",
-        zipCode: "170136",
-        address: "Av. 10 de Agosto 2920",
-        coordinates: "-0.220164, -78.518146"
-    }
+    // {
+    //     city: "Buenos Aires",
+    //     country: "Argentina",
+    //     zipCode: "C1011AAA",
+    //     address: "Av. 9 de Julio 701",
+    //     coordinates: "-34.604750, -58.393531"
+    // },
+    // {
+    //     city: "Belo Horizonte",
+    //     country: "Brazil",
+    //     zipCode: "30170-917",
+    //     address: "Avenida Amazonas 115",
+    //     coordinates: "-19.922292, -43.941375"
+    // },
+    // {
+    //     city: "Santiago de Chile",
+    //     country: "Chile",
+    //     zipCode: "7500000",
+    //     address: "Plaza de Armas 444",
+    //     coordinates: "-33.448830, -70.650732"
+    // },
+    // {
+    //     city: "Montevideo",
+    //     country: "Uruguay",
+    //     zipCode: "11000",
+    //     address: "18 de Julio 1360",
+    //     coordinates: "-34.903282, -56.186903"
+    // },
+    // {
+    //     city: "Quito",
+    //     country: "Ecuador",
+    //     zipCode: "170136",
+    //     address: "Av. 10 de Agosto 2920",
+    //     coordinates: "-0.220164, -78.518146"
+    // }
 ];
+
+module.exports = data_location 

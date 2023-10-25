@@ -62,3 +62,5 @@ const data_services = [
     quantity: 5,
   },
 ];
+
+module.exports = data_services;
