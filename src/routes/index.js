@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const { accommodationRouter } = require('./accommodation_router');
+const { servicesRouter } = require('./services_router');
 
 const router = Router();
 
-
 router.use('/api/accommodation', accommodationRouter);
+router.use('/api/services', servicesRouter);
 
 
 router.use((req, res, next) => {
