@@ -27,11 +27,13 @@ const seedDatabase = async () => {
         idLocation: locationId
       });
 
-      const randomServices = getRandomServices(allServices, 4, accommodation.idServices);
+      const randomServices = getRandomServices(allServices, Array.isArray(accommodation.idServices) ? accommodation.idServices : []);
 
-      accommodation.idServices = randomServices.map(service => service._id);
 
-      await accommodation.save();
+accommodation.idServices = randomServices.map(service => service._id);
+
+await accommodation.save();
+
     }
 
     console.log('Datos sembrados con éxito en la base de datos.');
@@ -42,10 +44,28 @@ const seedDatabase = async () => {
   }
 };
 
-function getRandomServices(allServices, count, assignedServices) {
-  const availableServices = allServices.filter(service => !assignedServices.some(assigned => assigned.name === service.name));
-  const shuffledServices = availableServices.slice().sort(() => 0.5 - Math.random());
-  return shuffledServices.slice(0, count);
+function getRandomServices(allServices, assignedServices) {
+  const requiredServiceNames = ["Bedroom", "Bathroom", "Wifi", "Kitchen"];
+  const remainingServices = allServices.filter(service => 
+    !assignedServices.some(assigned => requiredServiceNames.includes(assigned.name)) &&
+    !requiredServiceNames.includes(service.name)
+  );
+
+  const randomServices = [];
+  
+
+  requiredServiceNames.forEach(requiredServiceName => {
+    const requiredService = allServices.find(service => service.name === requiredServiceName);
+    randomServices.push(requiredService);
+  });
+
+
+  const shuffledServices = remainingServices.slice().sort(() => 0.5 - Math.random());
+  randomServices.push(...shuffledServices.slice(0, 2));
+
+  return randomServices;
 }
+
+
 
 seedDatabase();
