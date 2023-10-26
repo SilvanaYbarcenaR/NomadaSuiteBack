@@ -4,11 +4,7 @@ const Services = require('../../models/Services');
 
 const postAccommodation = async (req, res) => {
   try {
-
-    const { name, ownerId, Services, photos, description, price, city, country, zipCode, address, coordinates } = req.body;
-    if (!name || !ownerId || !Services || services.length === 0 || !photos || photos.length === 0 || !description || !price || !city || !country || !zipCode || !address || !coordinates) {
-      return res.status(400).json({ message: 'Faltan campos obligatorios.' });
-    }
+    const { name, ownerId, services, photos, description, price, city, country, zipCode, address, coordinates } = req.body;
 
     const locationData = {
       city,
@@ -20,14 +16,14 @@ const postAccommodation = async (req, res) => {
 
     const newLocation = await LocationAccommodation.create(locationData);
 
-    const selectedServices = req.body.services;
+    const selectedServices = services;
 
-    const services = await Services.find({ _id: { $in: selectedServices } });
+    const servicesData = await Services.find({ _id: { $in: selectedServices } });
 
     const accommodationData = {
       name,
       ownerId,
-      idServices: services,
+      idServices: servicesData, 
       photos,
       idLocation: newLocation,
       description,
