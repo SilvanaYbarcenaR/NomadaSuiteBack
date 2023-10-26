@@ -4,10 +4,12 @@ const {
   getAccommodations,
   postAccommodation,
   deleteAccommodation,
+  updateAccommodation,
 } = require("../controllers/index");
 
 accommodationRouter.get("/", getAccommodations);
 accommodationRouter.post("/create", postAccommodation);
 accommodationRouter.delete("/:id", deleteAccommodation);
+accommodationRouter.put("/:id", updateAccommodation);
 
 module.exports = { accommodationRouter };
