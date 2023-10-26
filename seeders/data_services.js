@@ -28,7 +28,10 @@ const data_services = [
     name: "Free washer",
     quantity: 1,
   },
-  { name: "Dryer", quantity: 1 },
+  {
+    name: "Dryer",
+    quantity: 1,
+  },
   {
     name: "Parking",
     quantity: 1,
