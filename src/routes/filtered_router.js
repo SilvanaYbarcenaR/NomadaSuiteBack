@@ -1,5 +1,4 @@
 const express = require("express");
-
 const filteredRouter = express.Router();
 const { filteredByBedrooms } = require("../controllers/index");
 
