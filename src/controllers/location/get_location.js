@@ -1,7 +1,7 @@
 const LocationAccommodation = require('../../models/LocationAccommodation')
 
 const getLocation = async (req, res) => {
-
+    
     const { name } = req.params;
 
     try {
@@ -11,13 +11,22 @@ const getLocation = async (req, res) => {
             const allLocations = await LocationAccommodation.find();
     
             return res.json(allLocations);
-        }
+        };
 
         const location = await LocationAccommodation.find({
-            city: {
-                $regex: new RegExp(name, 'i')
-            }
-        })
+            $or: [
+                {
+                    city: {
+                        $regex: new RegExp(name, 'i')
+                    }
+                },
+                {
+                    country: {
+                        $regex: new RegExp(name, 'i')
+                    }
+                }
+            ]
+        });
 
         res.json(location);
 
