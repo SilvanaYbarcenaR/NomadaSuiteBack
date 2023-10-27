@@ -10,7 +10,6 @@ const getAllUsers = require('./user/get_users');
 const getUserById = require('./user/get_user_by_id');
 const updateUser = require('./user/put_user');
 const deleteUser = require('./user/delete_user');
-const filteredByBedrooms = require("./filters/filteredByBedrooms");
 
 module.exports = {
   getAccommodations,
@@ -25,5 +24,4 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  filteredByBedrooms,
 };
