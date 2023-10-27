@@ -4,6 +4,11 @@ const postAccommodation = require('./accommodation/post_accommodations')
 const deleteAccommodation = require("./accommodation/delete_accommodation");
 const updateAccommodation = require("./accommodation/update_accommodation");
 const getServices = require('./services/get_services');
+const registerUser = require('./user/post_user');
+const getAllUsers = require('./user/get_users');
+const getUserById = require('./user/get_user_by_id');
+const updateUser = require('./user/put_user');
+const deleteUser = require('./user/delete_user');
 
 
 module.exports = {
@@ -13,4 +18,9 @@ module.exports = {
   deleteAccommodation,
   updateAccommodation,
   getServices,
+  registerUser,
+  getAllUsers, 
+  getUserById,
+  updateUser,
+  deleteUser
 };
