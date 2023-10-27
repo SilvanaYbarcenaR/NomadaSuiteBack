@@ -4,6 +4,7 @@ const postAccommodation = require("./accommodation/post_accommodations");
 const deleteAccommodation = require("./accommodation/delete_accommodation");
 const updateAccommodation = require("./accommodation/update_accommodation");
 const getServices = require('./services/get_services');
+const getLocation = require('./location/get_location')
 const registerUser = require('./user/post_user');
 const getAllUsers = require('./user/get_users');
 const getUserById = require('./user/get_user_by_id');
@@ -18,6 +19,7 @@ module.exports = {
   deleteAccommodation,
   updateAccommodation,
   getServices,
+  getLocation,
   registerUser,
   getAllUsers, 
   getUserById,

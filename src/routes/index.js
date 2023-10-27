@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { accommodationRouter } = require('./accommodation_router');
 const { servicesRouter } = require('./services_router');
+const { locationRouter } = require('./location_router');
 const { userRouter } = require('./user_router');
 const { filteredRouter } = require("./filtered_router");
 
@@ -8,6 +9,7 @@ const router = Router();
 
 router.use('/api/accommodation', accommodationRouter);
 router.use('/api/services', servicesRouter);
+router.use('/api/location', locationRouter);
 router.use('/api/user', userRouter);
 router.use("/api/filtered", filteredRouter);
 
