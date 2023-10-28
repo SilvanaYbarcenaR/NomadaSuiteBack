@@ -15,8 +15,6 @@ router.use('/api/user', userRouter);
 router.use('/api/filtered', filteredRouter);
 router.use('/api/reviews', reviewsRouter);
 
-
-
 router.use((req, res, next) => {
   console.log("Ruta no encontrada:", req.originalUrl);
   res.status(404).json({ error: "Ruta no encontrada" });

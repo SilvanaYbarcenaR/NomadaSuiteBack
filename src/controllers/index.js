@@ -15,7 +15,6 @@ const loginUser = require('./user/login_user');
 const getAllReviews = require('./reviews/get_reviews');
 const createReview = require('./reviews/post_review');
 
-
 module.exports = {
   getAccommodations,
   postAccommodation,
@@ -25,7 +24,7 @@ module.exports = {
   getServices,
   getLocation,
   registerUser,
-  getAllUsers, 
+  getAllUsers,
   getUserById,
   updateUser,
   deleteUser,
@@ -33,5 +32,4 @@ module.exports = {
   loginUser,
   getAllReviews,
   createReview,
-  
 };
