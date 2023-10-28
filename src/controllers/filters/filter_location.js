@@ -13,7 +13,7 @@ const filterLocation = async (req, res) => {
             };
         }
 
-        if (city && query.country) {
+        if (city) {
             query.city = {
                 $regex: new RegExp(city, 'i')
             };
