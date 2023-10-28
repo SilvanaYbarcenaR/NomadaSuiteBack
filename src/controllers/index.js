@@ -12,7 +12,6 @@ const deleteUser = require("./user/delete_user");
 const loginUser = require("./user/login_user");
 const getAllReviews = require("./reviews/get_reviews");
 const createReview = require("./reviews/post_review");
-const getAverageReviews = require("./reviews/get_average_reviews");
 
 module.exports = {
   getAccommodations,
@@ -29,5 +28,4 @@ module.exports = {
   loginUser,
   getAllReviews,
   createReview,
-  getAverageReviews
 };
