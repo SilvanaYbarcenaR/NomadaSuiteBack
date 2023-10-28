@@ -12,8 +12,8 @@ const getAccommodations = async (req, res) => {
 
     const accommodationsWithRatings = await Promise.all(accommodations.map(async (accommodation) => {
       const { _id: accommodationId } = accommodation;
-      const rating = await getAverageReviews({ body: { accommodationId } }, { // Simula la llamada a la función getAverageReviews
-        json: (data) => data // Simula el objeto de respuesta de la función
+      const rating = await getAverageReviews({ body: { accommodationId } }, { 
+        json: (data) => data 
       });
 
       return { ...accommodation._doc, rating: rating.averageRating };
