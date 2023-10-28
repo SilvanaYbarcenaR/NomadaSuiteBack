@@ -2,10 +2,18 @@ const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
     profileImage: String, 
-    userName: String,
+    userName: {
+        type: String,
+        unique: true, 
+        required: true,
+    },
     firstName: String,
     lastName: String,
-    email: String,
+    email: {
+        type: String,
+        unique: true, 
+        required: true,
+    },
     password: String,
     birthdate: Date,
     wantsNotifications: Boolean,
@@ -13,7 +21,6 @@ const userSchema = new mongoose.Schema({
     isOwner: Boolean,
     isAdmin: Boolean,
 })
-
 
 const User = mongoose.model('User', userSchema);
 
