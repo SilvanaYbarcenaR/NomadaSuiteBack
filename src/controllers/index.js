@@ -9,6 +9,9 @@ const getAllUsers = require('./user/get_users');
 const getUserById = require('./user/get_user_by_id');
 const updateUser = require('./user/put_user');
 const deleteUser = require('./user/delete_user');
+const loginUser = require('./user/login_user');
+const getAllReviews = require('./reviews/get_reviews');
+const createReview = require('./reviews/post_review');
 
 
 module.exports = {
@@ -22,5 +25,9 @@ module.exports = {
   getAllUsers, 
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  loginUser,
+  getAllReviews,
+  createReview,
+  
 };

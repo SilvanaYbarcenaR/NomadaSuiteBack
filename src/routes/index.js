@@ -2,12 +2,15 @@ const { Router } = require("express");
 const { accommodationRouter } = require('./accommodation_router');
 const { servicesRouter } = require('./services_router');
 const { userRouter } = require('./user_router');
+const { reviewsRouter } = require('./reviews_router');
 
 const router = Router();
 
 router.use('/api/accommodation', accommodationRouter);
 router.use('/api/services', servicesRouter);
 router.use('/api/user', userRouter);
+router.use('/api/reviews', reviewsRouter);
+
 
 
 router.use((req, res, next) => {
