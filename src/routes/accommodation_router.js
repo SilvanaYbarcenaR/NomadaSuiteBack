@@ -7,7 +7,7 @@ const {
   deleteAccommodation,
   updateAccommodation,
 } = require("../controllers/index");
-//nuevas rutas
+
 accommodationRouter.get('/', getAccommodations);
 accommodationRouter.post('/create', postAccommodation);
 accommodationRouter.get('/:id', getAccommodationById);
