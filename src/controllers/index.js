@@ -16,8 +16,7 @@ const loginUser = require('./user/login_user');
 const getAllReviews = require('./reviews/get_reviews');
 const createReview = require('./reviews/post_review');
 const combinatedFilter = require('./filters/combinated_filter');
-const cityApiIntegration = require('./city-api/city-api');
-
+const filteredByServices = require("./filters/filteredByServices");
 module.exports = {
   getAccommodations,
   postAccommodation,
@@ -37,5 +36,5 @@ module.exports = {
   createReview,
   filteredByBedrooms,
   combinatedFilter,
-  cityApiIntegration,
+  filteredByServices,
 };
