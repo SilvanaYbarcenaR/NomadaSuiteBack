@@ -7,35 +7,32 @@ const combinatedFilter = async (req, res) => {
     const { city, country, rooms } = req.query;
 
     try {
-
         const locationsAccommodation = await Accommodation
-        .find()
-        .populate('idLocation')
-        .populate('idServices')
+            .find()
+            .populate('idLocation')
+            .populate('idServices');
 
-        const filteredAccommodations = locationsAccommodation
-        .filter(accommodation => {
-            return (
-                accommodation.idLocation &&
-                accommodation.idLocation.city.match(new RegExp(city, 'i')) &&
-                accommodation.idLocation.country.match(new RegExp(country, 'i')
-            ))
-        })
-        .map((accommodation) => {
+        const filteredAccommodations = locationsAccommodation.filter(accommodation => {
+            const cityMatch = !city || (accommodation.idLocation && accommodation.idLocation.city.match(new RegExp(city, 'i')));
+
+            const countryMatch = !country || (accommodation.idLocation && accommodation.idLocation.country.match(new RegExp(country, 'i')));
+
+            return cityMatch && countryMatch;
+            
+        }).map((accommodation) => {
             const idServices = accommodation.idServices.filter((service) => {
-              return (
-                service.name === "Bedroom" && service.quantity == rooms
-              );
+                const isBedroom = service.name === "Bedroom";
+                const isRoomsMatch = !rooms || (service.quantity == rooms);
+                return isBedroom && isRoomsMatch;
             });
-    
+
             if (idServices.length > 0) {
-              accommodation.idServices = idServices;
-              return accommodation;
+                accommodation.idServices = idServices;
+                return accommodation;
             }
-    
+
             return null;
-          })
-          .filter((accommodation) => accommodation !== null);
+        }).filter((accommodation) => accommodation !== null);
 
         res.json(filteredAccommodations);
 
@@ -43,7 +40,7 @@ const combinatedFilter = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Ha ocurrido un error en el servidor' });
     }
-
 }
+
 
 module.exports = combinatedFilter;
