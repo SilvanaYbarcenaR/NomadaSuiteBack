@@ -1,10 +1,12 @@
 const LocationAccommodation = require('../../models/LocationAccommodation');
+const Accommodation = require("../../models/Accommodation");
 
 const filterLocation = async (req, res) => {
     
     const { country, city } = req.body;
 
     try {
+
         let query = {};
 
         if (country) {

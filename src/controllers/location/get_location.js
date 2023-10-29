@@ -2,10 +2,7 @@ const LocationAccommodation = require('../../models/LocationAccommodation')
 
 const getLocation = async (req, res) => {
 
-    const { name } = req.params;
-
     try {
-
 
         const allLocations = await LocationAccommodation.find();
 
