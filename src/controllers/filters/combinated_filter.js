@@ -4,7 +4,7 @@ const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const combinatedFilter = async (req, res) => {
 
-    const { city, country, quantity } = req.query;
+    const { city, country, rooms } = req.query;
 
     try {
 
@@ -24,7 +24,7 @@ const combinatedFilter = async (req, res) => {
         .map((accommodation) => {
             const idServices = accommodation.idServices.filter((service) => {
               return (
-                service.name === "Bedroom" && service.quantity == quantity
+                service.name === "Bedroom" && service.quantity == rooms
               );
             });
     
