@@ -12,7 +12,8 @@ const deleteUser = require("./user/delete_user");
 const loginUser = require("./user/login_user");
 const getAllReviews = require("./reviews/get_reviews");
 const createReview = require("./reviews/post_review");
-
+const filteredByBedrooms = require("./filters/filteredByBedrooms");
+const getCityInfo = require("./cities/get_cities_and_countries");
 module.exports = {
   getAccommodations,
   postAccommodation,
@@ -28,4 +29,6 @@ module.exports = {
   loginUser,
   getAllReviews,
   createReview,
+  filteredByBedrooms,
+  getCityInfo,
 };
