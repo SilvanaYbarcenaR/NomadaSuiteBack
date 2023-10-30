@@ -4,8 +4,8 @@ const Services = require('../../models/Services');
 
 const postAccommodation = async (req, res) => {
   try {
-    const { name, ownerId, services, photos, description, price, city, country, zipCode, address, coordinates } = req.body;
-
+    const { name, ownerId, services, description, price, city, country, zipCode, address, coordinates } = req.body;
+    
     const locationData = {
       city,
       country,
@@ -13,24 +13,25 @@ const postAccommodation = async (req, res) => {
       address,
       coordinates,
     };
-
     const newLocation = await LocationAccommodation.create(locationData);
 
     const selectedServices = services;
-
     const servicesData = await Services.find({ _id: { $in: selectedServices } });
+
+    const photos = req.imageURLs || []; 
 
     const accommodationData = {
       name,
       ownerId,
       idServices: servicesData, 
-      photos,
+      photos, 
       idLocation: newLocation,
       description,
       price,
       isActive: req.body.isActive,
     };
 
+    
     const newAccommodation = await Accommodation.create(accommodationData);
 
     res.json(newAccommodation);
