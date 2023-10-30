@@ -5,6 +5,12 @@ const { userRouter } = require("./user_router");
 const { reviewsRouter } = require("./reviews_router");
 const { filteredRouter } = require("./filtered_router");
 const { citiesRouter } = require("./cities_router");
+const { accommodationRouter } = require("./accommodation_router");
+const { servicesRouter } = require("./services_router");
+const { locationRouter } = require("./location_router");
+const { userRouter } = require("./user_router");
+const { filteredRouter } = require("./filtered_router");
+const { reviewsRouter } = require("./reviews_router");
 
 const router = Router();
 
