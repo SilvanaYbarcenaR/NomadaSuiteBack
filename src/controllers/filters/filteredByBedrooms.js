@@ -2,10 +2,10 @@ const Accommodation = require("../../models/Accommodation");
 
 const filteredByBedrooms = async (req, res) => {
   const bedroomsQuantity = req.body.quantity;
-  console.log(bedroomsQuantity);
+  // console.log(bedroomsQuantity);
   try {
     const filteredBedrooms = await Accommodation.find().populate("idServices");
-    console.log(filteredBedrooms.length);
+    // console.log(filteredBedrooms);
     const filtered = filteredBedrooms
       .map((accommodation) => {
         const idServices = accommodation.idServices.filter((service) => {
