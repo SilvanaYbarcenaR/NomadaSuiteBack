@@ -7,6 +7,8 @@ const data_location = require('./data_location');
 const data_services = require('./data_services');
 
 const seedDatabase = async () => {
+  let allServices; 
+
   try {
     await mongoose.connect('mongodb+srv://nomadasuite:FZ4xuOMeRT1UdSuc@nomadasuite.zkztyz0.mongodb.net/', {
       useNewUrlParser: true,
@@ -14,8 +16,14 @@ const seedDatabase = async () => {
     });
     console.log('Conexión a la base de datos exitosa.');
 
-    const allServices = await Services.insertMany(data_services);
-    console.log('Servicios insertados con éxito.');
+    const existingServices = await Services.find({});
+    if (existingServices.length === 0) {
+      allServices = await Services.insertMany(data_services); 
+      console.log('Servicios insertados con éxito.');
+    } else {
+      console.log('Los servicios ya existen en la base de datos. No se han insertado servicios adicionales.');
+      allServices = existingServices; 
+    }
 
     const locationIds = await LocationAccommodation.insertMany(data_location);
 
@@ -28,12 +36,9 @@ const seedDatabase = async () => {
       });
 
       const randomServices = getRandomServices(allServices, Array.isArray(accommodation.idServices) ? accommodation.idServices : []);
+      accommodation.idServices = randomServices.map(service => service._id);
 
-
-accommodation.idServices = randomServices.map(service => service._id);
-
-await accommodation.save();
-
+      await accommodation.save();
     }
 
     console.log('Datos sembrados con éxito en la base de datos.');
@@ -44,24 +49,27 @@ await accommodation.save();
   }
 };
 
+
 function getRandomServices(allServices, assignedServices) {
-  const requiredServiceNames = ["Bedroom", "Bathroom", "Wifi", "Kitchen"];
-  const remainingServices = allServices.filter(service => 
-    !assignedServices.some(assigned => requiredServiceNames.includes(assigned.name)) &&
-    !requiredServiceNames.includes(service.name)
-  );
+  const requiredServiceNames = ["Bathroom", "Kitchen", "Wifi"]; 
 
   const randomServices = [];
-  
 
   requiredServiceNames.forEach(requiredServiceName => {
     const requiredService = allServices.find(service => service.name === requiredServiceName);
     randomServices.push(requiredService);
   });
 
+  const remainingBedrooms = allServices.filter(service => service.name === "Bedroom" && !assignedServices.some(assigned => assigned.name === "Bedroom"));
 
-  const shuffledServices = remainingServices.slice().sort(() => 0.5 - Math.random());
-  randomServices.push(...shuffledServices.slice(0, 2));
+  if (remainingBedrooms.length > 0) {
+    const randomBedroom = remainingBedrooms[Math.floor(Math.random() * remainingBedrooms.length)];
+    randomServices.push(randomBedroom);
+  } else {
+    const assignedBedrooms = assignedServices.filter(assigned => assigned.name === "Bedroom");
+    const randomAssignedBedroom = assignedBedrooms[Math.floor(Math.random() * assignedBedrooms.length)];
+    randomServices.push(randomAssignedBedroom);
+  }
 
   return randomServices;
 }
