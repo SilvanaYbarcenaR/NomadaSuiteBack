@@ -1,27 +1,29 @@
-const axios = require("axios");
-
-// const cityName = "Buenos Aires";
+const CitiesCountries = require("../../models/CitiesCountries");
+const unorm = require("unorm");
 
 async function getCityInfo(req, res) {
-  const { name } = req.query;
-  console.log(name);
+  let city = req.query.city;
+  if (!city) throw new Error("You must enter a name");
+  city = unorm.nfd(city).replace(/[\u0300-\u036f]/g, "");
   try {
-    const response = await axios.get(
-      `https://api.api-ninjas.com/v1/city?name=${name}`,
-      {
-        headers: {
-          "X-Api-Key": "zVh59PsK2fzJfeEPGuZ8fA==Fdb2kJC7srMXa2Km",
-        },
-      }
-    );
+    const normalizedData = await CitiesCountries.find({}).lean();
 
-    const cityData = response.data;
+    // Normaliza la consulta
+    const normalizedQuery = unorm.nfd(city).replace(/[\u0300-\u036f]/g, "");
 
-    if (!cityData) throw new Error(" request error");
+    // Filtra los resultados que coinciden con la consulta normalizada
+    const found = normalizedData.filter((item) => {
+      const normalizedCity = unorm
+        .nfd(item.city)
+        .replace(/[\u0300-\u036f]/g, "");
+      return normalizedCity
+        .toLowerCase()
+        .startsWith(normalizedQuery.toLowerCase());
+    });
 
-    return res.json(cityData);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.json(found);
+  } catch (err) {
+    res.status(500).json({ error: "Error al buscar países" });
   }
 }
 
