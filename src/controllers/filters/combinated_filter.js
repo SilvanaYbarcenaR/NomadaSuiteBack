@@ -4,9 +4,10 @@ const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const combinatedFilter = async (req, res) => {
 
-    const { city, country, rooms } = req.query;
-
+    const { city, country, rooms, min, max, order } = req.query;
+    
     try {
+
         const locationsAccommodation = await Accommodation
             .find()
             .populate('idLocation')
@@ -19,7 +20,8 @@ const combinatedFilter = async (req, res) => {
 
             return cityMatch && countryMatch;
             
-        }).map((accommodation) => {
+        })
+        .map((accommodation) => {
             const idServices = accommodation.idServices.filter((service) => {
                 const isBedroom = service.name === "Bedroom";
                 const isRoomsMatch = !rooms || (service.quantity == rooms);
@@ -32,8 +34,28 @@ const combinatedFilter = async (req, res) => {
             }
 
             return null;
-        }).filter((accommodation) => accommodation !== null);
+        })
+        .filter((accommodation) => accommodation !== null)
+        .filter(
+            (accommodation) => {
+                const priceMatch = !min || !max || (accommodation.price >= Number(min) && accommodation.price <= Number(max))
+                return priceMatch;
+            }
+        )
+        .sort((a, b) => {
+            if (order === 'max-min') {
+                return b.price - a.price;
+            } else if (order === 'min-max') {
+                return a.price - b.price;
+            }
 
+            return 0;
+        })
+
+        if (filteredAccommodations.length === 0) {
+            res.status(404).json({message: 'Los parámetros indicados no corresponden a ningún alojamiento'})
+        }
+        
         res.json(filteredAccommodations);
 
     } catch (error) {
