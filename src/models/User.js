@@ -26,9 +26,27 @@ const userSchema = new mongoose.Schema({
   googleId: String,
 });
 
+//Hash y Salt: son procesos para dar mayor seguridad a la contraseña
+userSchema.plugin(passportLocalMongoose);
+//Agregamos findOrCreate al esquema usuarios
+userSchema.plugin(findOrCreate);
+
 const User = mongoose.model("User", userSchema);
 
-userSchema.plugin(passportLocalMongoose);
-userSchema.plugin(findOrCreate);
+// Creamos estrategia a partir del modelo
+passport.use(User.createStrategy());
+
+//serializar y desserializar
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
+    cb(null, { id: user.id });
+  });
+});
+
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
+    return cb(null, user);
+  });
+});
 
 module.exports = User;

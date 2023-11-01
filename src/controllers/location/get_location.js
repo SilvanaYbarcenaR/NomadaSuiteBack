@@ -1,18 +1,23 @@
-const LocationAccommodation = require('../../models/LocationAccommodation')
+const LocationAccommodation = require("../../models/LocationAccommodation");
 
 const getLocation = async (req, res) => {
+  try {
+    const allLocations = await LocationAccommodation.find();
 
-    try {
+    const uniqueCities = new Set();
 
-        const allLocations = await LocationAccommodation.find();
+    allLocations.forEach((location) => {
+      const cityCountry = `${location.city}, ${location.country}`;
+      uniqueCities.add(cityCountry);
+    });
 
-        return res.json(allLocations);
+    const uniqueCityArray = Array.from(uniqueCities);
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error interno del servidor' });
-    }
-
-}
+    return res.json(uniqueCityArray);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
 
 module.exports = getLocation;

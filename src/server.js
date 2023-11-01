@@ -7,26 +7,23 @@ const multer = require("multer");
 const path = require("path");
 const User = require("../src/models/User");
 const passport = require("passport");
-// const passportLocalMongoose = require("passport-local-mongoose");
+const session = require("express-session");
 dotenv.config();
-
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-// const findOrCreate = require("mongoose-findorcreate");
-// userSchema.plugin(passportLocalMongoose);
-// userSchema.plugin(findOrCreate);
 
-passport.serializeUser(function (user, cb) {
-  process.nextTick(function () {
-    cb(null, { id: user.id });
-  });
-});
+//middleware para manejar las sesiones mediante el paquete Express session
+server.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+//inicializar passport y la sesion que se va a ejecutar
+server.use(passport.initialize());
+server.use(passport.session());
 
-passport.deserializeUser(function (user, cb) {
-  process.nextTick(function () {
-    return cb(null, user);
-  });
-});
-
+//configurar estrategia de Google passport:
 passport.use(
   new GoogleStrategy(
     {
@@ -34,17 +31,31 @@ passport.use(
       clientSecret: process.env.CLIENT_SECRET,
       callbackURL: "http://localhost:5173/auth/google/home",
     },
+    //si el usuario no está en la base de datos lo crea y si está lo autentica:
     function (accessToken, refreshToken, profile, cb) {
-      User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        return cb(err, user);
-      });
+      User.findOrCreate(
+        { googleId: profile.id },
+        { userName: profile.displayName },
+        function (err, user) {
+          return cb(err, user);
+        }
+      );
     }
   )
 );
+//Rutas de autenticación de Google
 server.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile"] })
 );
+server
+  .route("/auth/google/home")
+  .get(
+    passport.authenticate("google", { failureredirect: "ruta de login" }),
+    function (req, res) {
+      res.redirect("/home");
+    }
+  );
 
 const cloudinary = require("cloudinary").v2;
 
