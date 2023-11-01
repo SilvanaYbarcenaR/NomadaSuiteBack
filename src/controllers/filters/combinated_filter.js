@@ -4,9 +4,13 @@ const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const combinatedFilter = async (req, res) => {
 
-    const { city, country, rooms, min, max, order } = req.query;
+    const { city, country, rooms, min, max, orderByPrice } = req.query;
     
     try {
+
+        function normalizeText(text) {
+            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
 
         const locationsAccommodation = await Accommodation
             .find()
@@ -14,9 +18,9 @@ const combinatedFilter = async (req, res) => {
             .populate('idServices');
 
         const filteredAccommodations = locationsAccommodation.filter(accommodation => {
-            const cityMatch = !city || (accommodation.idLocation && accommodation.idLocation.city.match(new RegExp(city, 'i')));
+            const cityMatch = !city || (accommodation.idLocation && normalizeText(accommodation.idLocation.city).match(new RegExp(normalizeText(city), 'i')));
 
-            const countryMatch = !country || (accommodation.idLocation && accommodation.idLocation.country.match(new RegExp(country, 'i')));
+            const countryMatch = !country || (accommodation.idLocation && normalizeText(accommodation.idLocation.country).match(new RegExp(normalizeText(country), 'i')));
 
             return cityMatch && countryMatch;
             
@@ -43,9 +47,9 @@ const combinatedFilter = async (req, res) => {
             }
         )
         .sort((a, b) => {
-            if (order === 'max-min') {
+            if (orderByPrice === 'max-min') {
                 return b.price - a.price;
-            } else if (order === 'min-max') {
+            } else if (orderByPrice === 'min-max') {
                 return a.price - b.price;
             }
 
