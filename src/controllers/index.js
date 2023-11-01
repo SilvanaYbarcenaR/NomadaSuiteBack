@@ -10,9 +10,13 @@ const getAllUsers = require('./user/get_users');
 const getUserById = require('./user/get_user_by_id');
 const updateUser = require('./user/put_user');
 const deleteUser = require('./user/delete_user');
+const filterLocation = require('./filters/filter_location');
+const filteredByBedrooms = require('./filters/filteredByBedrooms');
 const loginUser = require('./user/login_user');
 const getAllReviews = require('./reviews/get_reviews');
 const createReview = require('./reviews/post_review');
+const combinatedFilter = require('./filters/combinated_filter');
+const filteredByServices = require("./filters/filteredByServices");
 
 module.exports = {
   getAccommodations,
@@ -23,12 +27,16 @@ module.exports = {
   getServices,
   getLocation,
   registerUser,
-  getAllUsers, 
+  getAllUsers,
   getUserById,
   updateUser,
   deleteUser,
   loginUser,
   getAllReviews,
   createReview,
-  
+  filterLocation,
+  getAllReviews,
+  filteredByBedrooms,
+  combinatedFilter,
+  filteredByServices,
 };
