@@ -7,7 +7,7 @@ const filteredByPrice = async (req, res) => {
     const rango = allAccommodation.filter(
       (casa) => casa.price >= Number(min) && casa.price <= Number(max)
     );
-    console.log("gaaaaaa");
+
     res.status(200).json(rango);
   } catch (error) {
     res.status(400).json({ error: error.message });
