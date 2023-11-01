@@ -4,7 +4,7 @@ const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const combinatedFilter = async (req, res) => {
 
-    const { city, country, rooms, min, max, order } = req.query;
+    const { city, country, rooms, min, max, orderByPrice } = req.query;
     
     try {
 
@@ -43,9 +43,9 @@ const combinatedFilter = async (req, res) => {
             }
         )
         .sort((a, b) => {
-            if (order === 'max-min') {
+            if (orderByPrice === 'max-min') {
                 return b.price - a.price;
-            } else if (order === 'min-max') {
+            } else if (orderByPrice === 'min-max') {
                 return a.price - b.price;
             }
 
