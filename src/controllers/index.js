@@ -17,6 +17,7 @@ const getAllReviews = require('./reviews/get_reviews');
 const createReview = require('./reviews/post_review');
 const combinatedFilter = require('./filters/combinated_filter');
 const filteredByServices = require("./filters/filteredByServices");
+
 module.exports = {
   getAccommodations,
   postAccommodation,
@@ -30,10 +31,11 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  filterLocation,
   loginUser,
   getAllReviews,
   createReview,
+  filterLocation,
+  getAllReviews,
   filteredByBedrooms,
   combinatedFilter,
   filteredByServices,

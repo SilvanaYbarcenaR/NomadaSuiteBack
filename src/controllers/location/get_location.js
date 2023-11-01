@@ -6,7 +6,16 @@ const getLocation = async (req, res) => {
 
         const allLocations = await LocationAccommodation.find();
 
-        return res.json(allLocations);
+        const uniqueCities = new Set();
+    
+        allLocations.forEach((location) => {
+          const cityCountry = `${location.city}, ${location.country}`;
+          uniqueCities.add(cityCountry);
+        });
+    
+        const uniqueCityArray = Array.from(uniqueCities);
+    
+        return res.json(uniqueCityArray);
 
     } catch (error) {
         console.error(error);
