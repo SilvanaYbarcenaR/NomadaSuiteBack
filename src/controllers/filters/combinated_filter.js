@@ -8,15 +8,19 @@ const combinatedFilter = async (req, res) => {
     
     try {
 
+        function normalizeText(text) {
+            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
         const locationsAccommodation = await Accommodation
             .find()
             .populate('idLocation')
             .populate('idServices');
 
         const filteredAccommodations = locationsAccommodation.filter(accommodation => {
-            const cityMatch = !city || (accommodation.idLocation && accommodation.idLocation.city.match(new RegExp(city, 'i')));
+            const cityMatch = !city || (accommodation.idLocation && normalizeText(accommodation.idLocation.city).match(new RegExp(normalizeText(city), 'i')));
 
-            const countryMatch = !country || (accommodation.idLocation && accommodation.idLocation.country.match(new RegExp(country, 'i')));
+            const countryMatch = !country || (accommodation.idLocation && normalizeText(accommodation.idLocation.country).match(new RegExp(normalizeText(country), 'i')));
 
             return cityMatch && countryMatch;
             
