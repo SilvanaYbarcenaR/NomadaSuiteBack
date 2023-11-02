@@ -5,6 +5,7 @@ const { locationRouter } = require('./location_router');
 const { userRouter } = require('./user_router');
 const { filteredRouter } = require('./filtered_router');
 const { reviewsRouter } = require('./reviews_router');
+const checkoutStripeRouter  = require('./checkout_stripe_router');
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.use('/api/location', locationRouter);
 router.use('/api/user', userRouter);
 router.use('/api/filtered', filteredRouter);
 router.use('/api/reviews', reviewsRouter);
+router.use('/api/stripe', checkoutStripeRouter);
 
 router.use((req, res, next) => {
   console.log("Ruta no encontrada:", req.originalUrl);
