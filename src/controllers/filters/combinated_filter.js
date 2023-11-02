@@ -10,7 +10,10 @@ const combinatedFilter = async (req, res) => {
     try {
 
         function normalizeText(text) {
-            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if (text) {
+                return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            }
+            return "";
         }
 
         const locationsAccommodation = await Accommodation
@@ -31,7 +34,6 @@ const combinatedFilter = async (req, res) => {
 
             let cityMatch = false;
 
-            // Comprueba si la city se encuentra en idLocation.city o idLocation.country
             if (accommodation.idLocation) {
                 const normalizedCity = normalizeText(city);
                 const normalizedLocationCity = normalizeText(accommodation.idLocation.city);
