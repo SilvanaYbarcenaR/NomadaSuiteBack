@@ -10,7 +10,10 @@ const combinatedFilter = async (req, res) => {
     try {
 
         function normalizeText(text) {
-            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if (text) {
+                return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            }
+            return "";
         }
 
         const locationsAccommodation = await Accommodation
@@ -28,7 +31,20 @@ const combinatedFilter = async (req, res) => {
         }));
 
         const filteredAccommodations = accommodationsWithRatings.filter(accommodation => {
-            const cityMatch = !city || (accommodation.idLocation && normalizeText(accommodation.idLocation.city).match(new RegExp(normalizeText(city), 'i')));
+
+            let cityMatch = false;
+
+            if (accommodation.idLocation) {
+                const normalizedCity = normalizeText(city);
+                const normalizedLocationCity = normalizeText(accommodation.idLocation.city);
+                const normalizedLocationCountry = normalizeText(accommodation.idLocation.country);
+
+                if (normalizedLocationCity.match(new RegExp(normalizedCity, 'i'))) {
+                    cityMatch = true;
+                } else if (!normalizedLocationCity.match(new RegExp(normalizedCity, 'i')) && normalizedLocationCountry.match(new RegExp(normalizedCity, 'i'))) {
+                    cityMatch = true;
+                }
+            }
 
             const countryMatch = !country || (accommodation.idLocation && normalizeText(accommodation.idLocation.country).match(new RegExp(normalizeText(country), 'i')));
 
@@ -37,7 +53,7 @@ const combinatedFilter = async (req, res) => {
         })
             .map((accommodation) => {
                 const idServices = accommodation.idServices.filter((service) => {
-                    const isBedroom = service.name === "Bedroom";
+                    const isBedroom = service.name === "Habitación";
                     const isRoomsMatch = !rooms || (service.quantity == rooms);
                     return isBedroom && isRoomsMatch;
                 });
@@ -70,7 +86,7 @@ const combinatedFilter = async (req, res) => {
             res.status(404).json({ message: 'Los parámetros indicados no corresponden a ningún alojamiento' })
         }
 
-        res.json(filteredAccommodations);
+        res.status(200).json(filteredAccommodations);
 
     } catch (error) {
         console.error(error);
