@@ -68,7 +68,8 @@ const combinatedFilter = async (req, res) => {
             .filter((accommodation) => accommodation !== null)
             .filter(
                 (accommodation) => {
-                    const priceMatch = !min || !max || (accommodation.price >= Number(min) && accommodation.price <= Number(max))
+                    const priceMatch = (!min || accommodation.price >= Number(min)) && (!max || accommodation.price <= Number(max));
+
                     return priceMatch;
                 }
             )
