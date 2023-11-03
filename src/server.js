@@ -16,6 +16,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+server.use(express.raw());
+
 server.use(morgan('dev'));
 server.use(express.json());
 
