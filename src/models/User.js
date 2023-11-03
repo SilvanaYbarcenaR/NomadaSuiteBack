@@ -34,19 +34,19 @@ userSchema.plugin(findOrCreate);
 const User = mongoose.model("User", userSchema);
 
 // Creamos estrategia a partir del modelo
-passport.use(User.createStrategy());
+// passport.use(User.createStrategy());
 
 //serializar y desserializar
-passport.serializeUser(function (user, cb) {
-  process.nextTick(function () {
-    cb(null, { id: user.id });
-  });
-});
+// passport.serializeUser(function (user, cb) {
+//   process.nextTick(function () {
+//     cb(null, { id: user.id });
+//   });
+// });
 
-passport.deserializeUser(function (user, cb) {
-  process.nextTick(function () {
-    return cb(null, user);
-  });
-});
+// passport.deserializeUser(function (user, cb) {
+//   process.nextTick(function () {
+//     return cb(null, user);
+//   });
+// });
 
 module.exports = User;
