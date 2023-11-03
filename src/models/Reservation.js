@@ -1,38 +1,50 @@
 const mongoose = require('mongoose');
 
 const reservationSchema = new mongoose.Schema({
+    userId: {  
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', 
+        required: true 
+    },
     idAccommodation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Accommodation'
     },
-    totalPrice: Number,
+    monthlyRate: {
+        type: Number,
+        required: true,
+        validate: {
+            validator: function(value) {
+                return value > 0; 
+            },
+            message: 'El precio mensual debe ser mayor que cero'
+        }
+    },
     daysReserved: {
         type: Number,
         required: true,
-        min: 30 // Mínimo 30 días de reserva
+        min: 30 
     },
-    entryDate: {
+    startDate: {
         type: Date,
         required: true
     },
-    departureDate: {
+    endDate: {
         type: Date,
         required: true,
         validate: {
             validator: function (value) {
-                return value > this.entryDate; // Asegura que la fecha de salida sea posterior a la fecha de entrada
+                return value > this.startDate;
             },
             message: 'La fecha de salida debe ser posterior a la fecha de entrada'
         }
-    }
+    },
+    totalPrice: Number 
 });
 
-// Calcula el precio total antes de guardar la reserva
 reservationSchema.pre('save', function (next) {
-    // Lógica para calcular el precio total basado en los días reservados y el costo por día del alojamiento
-    // Puedes añadir la lógica de cálculo de precio aquí
-    // this.totalPrice = ...;
-
+    const monthsReserved = Math.ceil(this.daysReserved / 30); 
+    this.totalPrice = this.monthlyRate * monthsReserved; 
     next();
 });
 
