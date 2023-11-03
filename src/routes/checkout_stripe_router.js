@@ -1,8 +1,8 @@
+const stripe = require('stripe');
 const express = require('express');
 const checkoutStripeRouter = express.Router();
 const createPayment = require('../controllers/checkout/stripe_Checkout');
 const bodyParser = require('body-parser');
-
 
 checkoutStripeRouter.post('/charge', createPayment);
 
