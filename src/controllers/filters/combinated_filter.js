@@ -1,40 +1,93 @@
 const Accommodation = require("../../models/Accommodation");
+const getAverageReviews = require('../reviews/get_average_reviews');
 const Services = require('../../models/Services');
 const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const combinatedFilter = async (req, res) => {
 
-    const { city, country, rooms } = req.query;
+    const { city, country, rooms, min, max, orderByPrice } = req.query;
 
     try {
+
+        function normalizeText(text) {
+            if (text) {
+                return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            }
+            return "";
+        }
+
         const locationsAccommodation = await Accommodation
             .find()
             .populate('idLocation')
             .populate('idServices');
 
-        const filteredAccommodations = locationsAccommodation.filter(accommodation => {
-            const cityMatch = !city || (accommodation.idLocation && accommodation.idLocation.city.match(new RegExp(city, 'i')));
-
-            const countryMatch = !country || (accommodation.idLocation && accommodation.idLocation.country.match(new RegExp(country, 'i')));
-
-            return cityMatch && countryMatch;
-            
-        }).map((accommodation) => {
-            const idServices = accommodation.idServices.filter((service) => {
-                const isBedroom = service.name === "Bedroom";
-                const isRoomsMatch = !rooms || (service.quantity == rooms);
-                return isBedroom && isRoomsMatch;
+        const accommodationsWithRatings = await Promise.all(locationsAccommodation.map(async (accommodation) => {
+            const { _id: accommodationId } = accommodation;
+            const rating = await getAverageReviews({ body: { accommodationId } }, {
+                json: (data) => data
             });
 
-            if (idServices.length > 0) {
-                accommodation.idServices = idServices;
-                return accommodation;
+            return { ...accommodation._doc, rating: rating.averageRating };
+        }));
+
+        const filteredAccommodations = accommodationsWithRatings.filter(accommodation => {
+
+            let cityMatch = false;
+
+            if (accommodation.idLocation) {
+                const normalizedCity = normalizeText(city);
+                const normalizedLocationCity = normalizeText(accommodation.idLocation.city);
+                const normalizedLocationCountry = normalizeText(accommodation.idLocation.country);
+
+                if (normalizedLocationCity.match(new RegExp(normalizedCity, 'i'))) {
+                    cityMatch = true;
+                } else if (!normalizedLocationCity.match(new RegExp(normalizedCity, 'i')) && normalizedLocationCountry.match(new RegExp(normalizedCity, 'i'))) {
+                    cityMatch = true;
+                }
             }
 
-            return null;
-        }).filter((accommodation) => accommodation !== null);
+            const countryMatch = !country || (accommodation.idLocation && normalizeText(accommodation.idLocation.country).match(new RegExp(normalizeText(country), 'i')));
 
-        res.json(filteredAccommodations);
+            return cityMatch && countryMatch;
+
+        })
+            .map((accommodation) => {
+                const idServices = accommodation.idServices.filter((service) => {
+                    const isBedroom = service.name === "Habitación";
+                    const isRoomsMatch = !rooms || (service.quantity == rooms);
+                    return isBedroom && isRoomsMatch;
+                });
+
+                if (idServices.length > 0) {
+                    accommodation.idServices = idServices;
+                    return accommodation;
+                }
+
+                return null;
+            })
+            .filter((accommodation) => accommodation !== null)
+            .filter(
+                (accommodation) => {
+                    const priceMatch = (!min || accommodation.price >= Number(min)) && (!max || accommodation.price <= Number(max));
+
+                    return priceMatch;
+                }
+            )
+            .sort((a, b) => {
+                if (orderByPrice === 'max-min') {
+                    return b.price - a.price;
+                } else if (orderByPrice === 'min-max') {
+                    return a.price - b.price;
+                }
+
+                return 0;
+            })
+
+        if (filteredAccommodations.length === 0) {
+            res.status(404).json({ message: 'Los parámetros indicados no corresponden a ningún alojamiento' })
+        }
+
+        res.status(200).json(filteredAccommodations);
 
     } catch (error) {
         console.error(error);
