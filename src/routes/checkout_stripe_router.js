@@ -1,4 +1,4 @@
-const stripe = require('stripe');
+const stripe = require('stripe')('sk_test_51O7j6AB5JkK26D9XNZkbUpZqEY6VlSep1gISiXFc0IUyPiHKrAHLv5R0cHeVIXtnTbhhhAToD0o1JK1RPPA8jJf100y5twZqAq');
 const express = require('express');
 const checkoutStripeRouter = express.Router();
 const createPayment = require('../controllers/checkout/stripe_Checkout');
@@ -13,9 +13,8 @@ checkoutStripeRouter.use(bodyParser.raw({ type: 'application/json' }));
 
 checkoutStripeRouter.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
-
   try {
-    const event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    const event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
     console.log('Evento:', event);
     res.json({ received: true });
   } catch (err) {
