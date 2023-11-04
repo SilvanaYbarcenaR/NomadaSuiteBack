@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
 
         const existingEmail = await User.findOne({ email });
         if (existingEmail) {
-            return res.status(400).json({ error: 'El correo electrónico ya está registrado' });
+            return res.status(400).json({ error: 'El correo electrónico ya está registrado', userId: existingEmail._id });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -43,6 +43,7 @@ const registerUser = async (req, res) => {
             avatarImages: images,
             isAdmin: false,
             isActive: true,
+            googleId
         });
 
         await newUser.save();

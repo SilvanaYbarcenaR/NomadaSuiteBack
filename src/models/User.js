@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     isActive: Boolean,
     isOwner: Boolean,
     isAdmin: Boolean,
+    googleId: String
 })
 
 const User = mongoose.model('User', userSchema);
