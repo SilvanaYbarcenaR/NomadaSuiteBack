@@ -12,7 +12,7 @@ const registerUser = async (req, res) => {
 
         const existingEmail = await User.findOne({ email });
         if (existingEmail) {
-            return res.status(400).json({ error: 'El correo electrónico ya está registrado' });
+            return res.status(400).json({ error: 'El correo electrónico ya está registrado', userId: existingEmail._id });
         }
 
         const existingUserName = await User.findOne({ userName });
@@ -30,6 +30,7 @@ const registerUser = async (req, res) => {
             birthdate,
             isAdmin: false,
             isActive: true,
+            googleId
         });
 
         await newUser.save();
