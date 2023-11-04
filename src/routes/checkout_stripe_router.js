@@ -10,12 +10,11 @@ checkoutStripeRouter.post('/charge', createPayment);
 
 checkoutStripeRouter.use(bodyParser.raw({ type: 'application/json' }));
 
-console.log('Valor de endpointSecret:', endpointSecret);
 
 checkoutStripeRouter.post('/webhook', async (req, res) => {
     const sig = req.headers['stripe-signature'];
     try {
-      const event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+      const event = stripe.Webhooks.constructEventFromPayload(req.body, sig, endpointSecret);
       console.log('Evento:', event);
       res.json({ received: true });
     } catch (err) {
