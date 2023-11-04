@@ -24,7 +24,7 @@ const loginUser = async (req, res) => {
     const accessToken = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '30m' });
     const refreshToken = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '7d' });
 
-    // Including all user information in the response
+
     res.json({
       accessToken,
       refreshToken,
@@ -40,7 +40,6 @@ const loginUser = async (req, res) => {
         isActive: user.isActive,
         isOwner: user.isOwner,
         isAdmin: user.isAdmin
-        // Include other user information here based on the model
       }
     });
 

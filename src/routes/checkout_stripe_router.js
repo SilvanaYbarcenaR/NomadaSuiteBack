@@ -3,10 +3,14 @@ const express = require('express');
 const checkoutStripeRouter = express.Router();
 const createPayment = require('../controllers/checkout/stripe_Checkout');
 const bodyParser = require('body-parser');
+require('dotenv').config();
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 checkoutStripeRouter.post('/charge', createPayment);
 
 checkoutStripeRouter.use(bodyParser.raw({ type: 'application/json' }));
+
+console.log('Valor de endpointSecret:', endpointSecret);
 
 checkoutStripeRouter.post('/webhook', async (req, res) => {
     const sig = req.headers['stripe-signature'];
