@@ -6,7 +6,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 passport.use(User.createStrategy());
 
-//configurar estrategia de Google passport: middleware
+//configurar estrategia de Google passport:
 
 passport.use(
   "auth-google",
@@ -31,7 +31,7 @@ passport.use(
           const newUser = new User({
             googleId: profile.id,
             userName: profile.displayName,
-            email: profile?.emails[0]?.value, // Puedes incluir el email si está disponible
+            email: profile?.emails[0]?.value,
           });
 
           // Guarda el nuevo usuario en la base de datos

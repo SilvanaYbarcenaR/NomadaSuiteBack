@@ -7,12 +7,8 @@ const multer = require("multer");
 const path = require("path");
 const { passport } = require("../src/middlewareGoogle/google");
 const { loginGoogleRouter } = require("../src/routes/login_google_router");
-// const User = require("../src/models/User");
-// const passport = require("passport");
 const session = require("express-session");
 dotenv.config();
-
-// const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 //middleware para manejar las sesiones mediante el paquete Express session
 server.use(
@@ -22,11 +18,6 @@ server.use(
     saveUninitialized: true,
   })
 );
-// //inicializar passport y la sesion que se va a ejecutar
-// server.use(passport.initialize());
-// server.use(passport.session());
-
-// passport.use(User.createStrategy());
 
 //serializar y desserializar
 passport.serializeUser(function (user, cb) {
@@ -40,46 +31,6 @@ passport.deserializeUser(function (user, cb) {
     return cb(null, user);
   });
 });
-
-//configurar estrategia de Google passport: middleware
-
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.CLIENT_ID,
-//       clientSecret: process.env.CLIENT_SECRET,
-//       callbackURL: "http://localhost:3001/auth/google",
-//     },
-//     async function (accessToken, refreshToken, profile, cb) {
-//       try {
-//         // Buscar si ya existe un usuario con el googleId
-//         const existingUser = await User.findOne({
-//           googleId: profile.id,
-//         }).exec();
-
-//         if (existingUser) {
-//           // Si el usuario ya existe, autentica al usuario existente
-//           return cb(null, existingUser);
-//         } else {
-//           // Si el usuario no existe, crea un nuevo usuario
-//           const newUser = new User({
-//             googleId: profile.id,
-//             userName: profile.displayName,
-//             email: profile?.emails[0]?.value, // Puedes incluir el email si está disponible
-//           });
-
-//           // Guarda el nuevo usuario en la base de datos
-//           const savedUser = await newUser.save();
-
-//           // Autentica al nuevo usuario
-//           return cb(null, savedUser);
-//         }
-//       } catch (err) {
-//         return cb(err);
-//       }
-//     }
-//   )
-// );
 
 const cloudinary = require("cloudinary").v2;
 
@@ -148,25 +99,6 @@ server.use(
   }),
   loginGoogleRouter
 );
-
-// server.get(
-//   "/auth/google",
-//   passport.authenticate("google", {
-//     scope: [
-//       "https://www.googleapis.com/auth/userinfo.profile",
-//       "https://www.googleapis.com/auth/userinfo.email",
-//     ],
-//   })
-// );
-
-// server.route("/auth/google").get(
-//   passport.authenticate("google", {
-//     failureRedirect: "ruta a la cual redireccionar si hay error",
-//   }),
-//   function (req, res) {
-//     res.redirect("http://localhost:5173/home");
-//   }
-// );
 
 server.use(router);
 
