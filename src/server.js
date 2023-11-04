@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const router = require("./routes");
 const morgan = require('morgan');
+const bodyParser = require('body-parser'); // Importa body-parser
 const dotenv = require('dotenv');
 const multer = require('multer');
 const path = require('path');
@@ -15,6 +16,8 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+server.use(bodyParser.json());
 
 server.use(express.raw());
 
