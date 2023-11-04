@@ -15,7 +15,7 @@ console.log('endpointSecret', endpointSecret)
 checkoutStripeRouter.post('/webhook', bodyParser.raw({ type: 'application/json' }), (req, res) => {
   const sig = req.headers['stripe-signature'];
   try {
-    const event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
+    const event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
     console.log('Evento:', event);
     res.json({ received: true });
   } catch (err) {
