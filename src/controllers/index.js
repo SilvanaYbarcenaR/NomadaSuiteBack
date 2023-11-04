@@ -17,6 +17,7 @@ const getAllReviews = require('./reviews/get_reviews');
 const createReview = require('./reviews/post_review');
 const combinatedFilter = require('./filters/combinated_filter');
 const filteredByServices = require("./filters/filteredByServices");
+const sendEmail = require('./email/send_email');
 
 module.exports = {
   getAccommodations,
@@ -39,4 +40,5 @@ module.exports = {
   filteredByBedrooms,
   combinatedFilter,
   filteredByServices,
+  sendEmail,
 };
