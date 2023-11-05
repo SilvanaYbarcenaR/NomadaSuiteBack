@@ -6,14 +6,25 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const checkoutStripeRouter = express.Router();
 
+checkoutStripeRouter.use((req, res, next) => {
+  let data = '';
+  req.on('data', chunk => {
+    data += chunk;
+  });
+
+  req.on('end', () => {
+    req.rawBody = data;
+    next();
+  });
+});
+
 checkoutStripeRouter.post('/charge', createPayment);
 
 checkoutStripeRouter.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
-  const body = req.rawBody; // Utiliza req.rawBody si está disponible en lugar de procesar el cuerpo
 
   try {
-    const event = await stripe.webhooks.constructEvent(body, sig, endpointSecret);
+    const event = await stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
     console.log('Evento:', event);
     res.json({ received: true });
   } catch (err) {
