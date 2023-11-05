@@ -8,26 +8,18 @@ const checkoutStripeRouter = express.Router();
 
 checkoutStripeRouter.post('/charge', createPayment);
 
-checkoutStripeRouter.post('/webhook', (req, res) => {
+checkoutStripeRouter.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
+  const body = req.rawBody; // Utiliza req.rawBody si está disponible en lugar de procesar el cuerpo
 
-  let body = '';
-
-  // Manejar la solicitud en trozos (chunks) para evitar problemas con grandes cargas
-  req.on('data', chunk => {
-    body += chunk.toString();
-  });
-
-  req.on('end', () => {
-    try {
-      const event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-      console.log('Evento:', event);
-      res.json({ received: true });
-    } catch (err) {
-      console.error('Error de webhook:', err);
-      res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-  });
+  try {
+    const event = await stripe.webhooks.constructEvent(body, sig, endpointSecret);
+    console.log('Evento:', event);
+    res.json({ received: true });
+  } catch (err) {
+    console.error('Error de webhook:', err);
+    res.status(400).send(`Webhook Error: ${err.message}`);
+  }
 });
 
 module.exports = checkoutStripeRouter;
