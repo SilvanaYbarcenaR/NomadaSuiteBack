@@ -1,29 +1,33 @@
-const stripe = require('stripe')('sk_test_51O7j6AB5JkK26D9XNZkbUpZqEY6VlSep1gISiXFc0IUyPiHKrAHLv5R0cHeVIXtnTbhhhAToD0o1JK1RPPA8jJf100y5twZqAq');
+const stripe = require('stripe')('sk_test_...'); // Tu clave secreta de Stripe
 const express = require('express');
-const checkoutStripeRouter = express.Router();
 const createPayment = require('../controllers/checkout/stripe_Checkout');
-const bodyParser = require('body-parser');
 require('dotenv').config();
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
+const checkoutStripeRouter = express.Router();
+
+console.log('endpointSecret', endpointSecret);
+
 checkoutStripeRouter.post('/charge', createPayment);
 
-checkoutStripeRouter.use(bodyParser.raw({ type: 'application/json' }));
-
-console.log('endpointSecret', endpointSecret)
-
-checkoutStripeRouter.post('/webhook', bodyParser.raw({ type: 'application/json' }), (req, res) => {
+checkoutStripeRouter.post('/webhook', (req, res) => {
   const sig = req.headers['stripe-signature'];
-  try {
-    const event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-    console.log('Evento:', event);
-    res.json({ received: true });
-  } catch (err) {
-    console.error('Error de webhook:', err);
-    res.status(400).send(`Webhook Error: ${err.message}`);
-  }
+  let body = '';
+
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
+  
+  req.on('end', () => {
+    try {
+      const event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
+      console.log('Evento:', event);
+      res.json({ received: true });
+    } catch (err) {
+      console.error('Error de webhook:', err);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  });
 });
-
-
 
 module.exports = checkoutStripeRouter;
