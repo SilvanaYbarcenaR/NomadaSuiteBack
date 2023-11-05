@@ -15,9 +15,12 @@ passport.use(
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
       callbackURL: "http://localhost:3001/auth/google",
+      passReqToCallback: true,
     },
     async function (accessToken, refreshToken, profile, cb) {
       try {
+        const access_token = req.query.access_token;
+        const refresh_token = req.query.refresh_token;
         // Buscar si ya existe un usuario con el googleId
         const existingUser = await User.findOne({
           googleId: profile.id,
@@ -38,7 +41,7 @@ passport.use(
           const savedUser = await newUser.save();
 
           // Autentica al nuevo usuario
-          return cb(null, savedUser);
+          return cb(null, savedUser, access_token, refresh_token);
         }
       } catch (err) {
         return cb(err);
