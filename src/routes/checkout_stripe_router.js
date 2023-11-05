@@ -1,4 +1,4 @@
-const stripe = require('stripe')('sk_test_...'); // Tu clave secreta de Stripe
+const stripe = require('stripe')('sk_test_51O7j6AB5JkK26D9XNZkbUpZqEY6VlSep1gISiXFc0IUyPiHKrAHLv5R0cHeVIXtnTbhhhAToD0o1JK1RPPA8jJf100y5twZqAq'); 
 const express = require('express');
 const createPayment = require('../controllers/checkout/stripe_Checkout');
 require('dotenv').config();
@@ -6,18 +6,18 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const checkoutStripeRouter = express.Router();
 
-console.log('endpointSecret', endpointSecret);
-
 checkoutStripeRouter.post('/charge', createPayment);
 
 checkoutStripeRouter.post('/webhook', (req, res) => {
   const sig = req.headers['stripe-signature'];
+
   let body = '';
 
+  // Manejar la solicitud en trozos (chunks) para evitar problemas con grandes cargas
   req.on('data', chunk => {
     body += chunk.toString();
   });
-  
+
   req.on('end', () => {
     try {
       const event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
