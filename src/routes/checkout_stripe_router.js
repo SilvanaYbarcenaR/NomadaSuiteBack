@@ -2,6 +2,7 @@ const stripe = require('stripe')('sk_test_51O7j6AB5JkK26D9XNZkbUpZqEY6VlSep1gISi
 const express = require('express');
 const createPayment = require('../controllers/checkout/stripe_Checkout');
 require('dotenv').config();
+const bodyParser = require('body-parser');
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const checkoutStripeRouter = express.Router();
@@ -18,19 +19,25 @@ checkoutStripeRouter.use((req, res, next) => {
   });
 });
 
-checkoutStripeRouter.post('/charge', createPayment);
+checkoutStripeRouter.use(bodyParser.raw({ type: 'application/json' }));
 
-checkoutStripeRouter.post('/webhook', async (req, res) => {
+checkoutStripeRouter.post('/webhook', (req, res) => {
   const sig = req.headers['stripe-signature'];
+  let event;
 
   try {
-    const event = await stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
-    console.log('Evento:', event);
-    res.json({ received: true });
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
-    console.error('Error de webhook:', err);
-    res.status(400).send(`Webhook Error: ${err.message}`);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
   }
+
+  if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+      
+      console.log('Pago completado:', session);
+  }
+
+  res.json({ received: true });
 });
 
 module.exports = checkoutStripeRouter;
