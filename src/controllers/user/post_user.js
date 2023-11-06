@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ error: 'El correo electrónico ya está registrado', userFound: existingEmail });
         }
 
-        let hashedPassword = "";
+        let hashedPassword = null;
 
         if(password) {
             hashedPassword = await bcrypt.hash(password, 10);
@@ -52,7 +52,7 @@ const registerUser = async (req, res) => {
 
         await newUser.save();
 
-        res.status(201).json({ message: 'Usuario registrado con éxito', userId: newUser._id, generatedUserName: userName });
+        res.status(201).json({ message: 'Usuario registrado con éxito', userId: newUser._id, generatedUserName: userName, user: newUser });
     } catch (error) {
         console.error(error);
         res.status(400).json({ error: 'No se pudo registrar el usuario' });
