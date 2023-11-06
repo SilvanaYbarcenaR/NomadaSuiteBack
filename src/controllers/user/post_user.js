@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const registerUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, birthdate, avatarImages } = req.body;
+        const { firstName, lastName, email, password, birthdate, profileImage, googleId } = req.body;
 
         let baseUserName = (firstName + lastName).toLowerCase().replace(/\s/g, ''); 
 
@@ -26,12 +26,16 @@ const registerUser = async (req, res) => {
 
         const existingEmail = await User.findOne({ email });
         if (existingEmail) {
-            return res.status(400).json({ error: 'El correo electrónico ya está registrado', userId: existingEmail._id });
+            return res.status(400).json({ error: 'El correo electrónico ya está registrado', userFound: existingEmail });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        let hashedPassword = "";
 
-        const images = req.avatarImageURLs || [];
+        if(password) {
+            hashedPassword = await bcrypt.hash(password, 10);
+        }
+
+        /* const images = req.avatarImageURLs || []; */
 
         const newUser = new User({
             userName,
@@ -40,7 +44,7 @@ const registerUser = async (req, res) => {
             email,
             password: hashedPassword,
             birthdate,
-            avatarImages: images,
+            profileImage,
             isAdmin: false,
             isActive: true,
             googleId
