@@ -15,9 +15,10 @@ checkoutStripeRouter.post('/webhook', async (req, res) => {
   const event = req.body;
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  const eventData = JSON.parse(event);
+  const eventData = req.body;
 
-  const isSignatureValid = Stripe.webhooks.verifySignatureV2(
+
+  const isSignatureValid = stripe.webhooks.verifySignatureV2(
     eventData,
     signature,
     secret
