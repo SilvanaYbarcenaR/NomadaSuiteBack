@@ -2,42 +2,42 @@ const stripe = require('stripe')('sk_test_51O7j6AB5JkK26D9XNZkbUpZqEY6VlSep1gISi
 const express = require('express');
 const createPayment = require('../controllers/checkout/stripe_Checkout');
 require('dotenv').config();
-const bodyParser = require('body-parser');
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const checkoutStripeRouter = express.Router();
 
-checkoutStripeRouter.use((req, res, next) => {
-  let data = '';
-  req.on('data', chunk => {
-    data += chunk;
-  });
 
-  req.on('end', () => {
-    req.rawBody = data;
-    next();
-  });
-});
+checkoutStripeRouter.post('/charge', createPayment);
 
-checkoutStripeRouter.use(bodyParser.raw({ type: 'application/json' }));
+checkoutStripeRouter.use(express.json());
 
-checkoutStripeRouter.post('/webhook', (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
+checkoutStripeRouter.post('/webhook', async (req, res) => {
+  const signature = req.headers['stripe-signature'];
+  const event = req.body;
+  const secret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  try {
-      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-  } catch (err) {
-      return res.status(400).send(`Webhook Error: ${err.message}`);
+  const eventData = JSON.parse(event);
+
+  const isSignatureValid = Stripe.webhooks.verifySignatureV2(
+    eventData,
+    signature,
+    secret
+  );
+
+  if (!isSignatureValid) {
+    res.status(400).send('Error de firma de webhook');
+    return;
   }
 
-  if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-      
-      console.log('Pago completado:', session);
+  // Procesa el evento de webhook
+  const eventHandler = webhookHandlers[eventData.type];
+  if (eventHandler) {
+    await eventHandler(eventData);
+  } else {
+    res.status(404).send('Evento de webhook no reconocido');
+    return;
   }
 
-  res.json({ received: true });
+  res.status(200).send();
 });
 
 module.exports = checkoutStripeRouter;
