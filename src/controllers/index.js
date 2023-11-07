@@ -20,6 +20,7 @@ const updateReview = require('./reviews/update_review');
 const getAllReviewsByAccommodationId = require('./reviews/get_review_by_acommodation');
 const combinatedFilter = require('./filters/combinated_filter');
 const filteredByServices = require("./filters/filteredByServices");
+const sendEmail = require('./email/send_email');
 // const mercadoPagoController = require("./checkout/mercadoPago_checkout");
 const createPayment = require("./checkout/stripe_Checkout");
 
@@ -47,5 +48,6 @@ module.exports = {
   filteredByBedrooms,
   combinatedFilter,
   filteredByServices,
+  sendEmail,
   createPayment
 };
