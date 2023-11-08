@@ -23,7 +23,6 @@ const filteredByServices = require("./filters/filteredByServices");
 const sendEmail = require("./email/send_email");
 // const mercadoPagoController = require("./checkout/mercadoPago_checkout");
 const createPayment = require("./checkout/stripe_Checkout");
-const getUsersActives = require("./user/get_users_actives");
 
 module.exports = {
   getAccommodations,
@@ -51,4 +50,6 @@ module.exports = {
   sendEmail,
   createPayment,
   getUsersActives,
+  getReservations,
+  getUserReservations,
 };
