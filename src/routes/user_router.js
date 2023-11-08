@@ -11,7 +11,7 @@ const {
 } = require("../controllers/index");
 
 userRouter.get("/", getAllUsers);
-userRouter.get("/actives", getUsersActives);
+userRouter.get("/actives/true", getUsersActives);
 userRouter.get("/:id", getUserById);
 userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
