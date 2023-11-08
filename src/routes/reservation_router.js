@@ -1,34 +1,45 @@
-const Reservation = require('../models/Reservation');
+const Reservation = require("../models/Reservation");
 const express = require("express");
 const reservationRouter = express.Router();
 const handlePaymentSuccess = require("../controllers/checkout/handle_sucess");
+const {
+  getReservations,
+  getUserReservations,
+} = require("../controllers/index");
 
-reservationRouter.post('/sucess', handlePaymentSuccess);
+reservationRouter.post("/sucess", handlePaymentSuccess);
 
-reservationRouter.get('/disponibilidad/:accommodationId', async (req, res) => {
-    try {
-        const { accommodationId } = req.params;
+reservationRouter.get("/disponibilidad/:accommodationId", async (req, res) => {
+  try {
+    const { accommodationId } = req.params;
 
-        const reservations = await Reservation.find({ idAccommodation: accommodationId });
+    const reservations = await Reservation.find({
+      idAccommodation: accommodationId,
+    });
 
-        const availability = {};
+    const availability = {};
 
-        reservations.forEach(reservation => {
-            const start = new Date(reservation.startDate);
-            const end = new Date(reservation.endDate);
-            const currentDate = new Date(start);
+    reservations.forEach((reservation) => {
+      const start = new Date(reservation.startDate);
+      const end = new Date(reservation.endDate);
+      const currentDate = new Date(start);
 
-            while (currentDate <= end) {
-                availability[currentDate.toISOString().split('T')[0]] = false; 
-                currentDate.setDate(currentDate.getDate() + 1); 
-            }
-        });
+      while (currentDate <= end) {
+        availability[currentDate.toISOString().split("T")[0]] = false;
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    });
 
-        return res.json({ availability });
-    } catch (error) {
-        return res.status(500).json({ message: 'Error al obtener la disponibilidad', error: error.message });
-    }
+    return res.json({ availability });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error al obtener la disponibilidad",
+      error: error.message,
+    });
+  }
 });
 
+reservationRouter.get("/", getReservations);
+reservationRouter.get("/:userId", getUserReservations);
 
-module.exports = reservationRouter
+module.exports = reservationRouter;
