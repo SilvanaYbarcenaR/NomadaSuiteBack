@@ -3,10 +3,11 @@ const Services = require('../../models/Services');
 const LocationAccommodation = require('../../models/LocationAccommodation');
 const getAverageReviews = require('../reviews/get_average_reviews'); 
 
-const getAccommodations = async (req, res) => {
+
+const getPendingAccommodations = async (req, res) => {
   try {
     const accommodations = await Accommodation
-      .find({ isActive: true })
+      .find({ isActive: false, __v: 0 }) 
       .populate('idServices')
       .populate('idLocation');
 
@@ -25,6 +26,6 @@ const getAccommodations = async (req, res) => {
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
-
-module.exports = getAccommodations;
-
+  
+  module.exports = getPendingAccommodations;
+  

@@ -2,7 +2,7 @@ const express = require('express');
 const server = express();
 const router = require("./routes");
 const morgan = require('morgan');
-const bodyParser = require('body-parser'); // Importa body-parser
+const bodyParser = require('body-parser'); 
 const dotenv = require('dotenv');
 const multer = require('multer');
 const path = require('path');
@@ -48,6 +48,7 @@ server.use(upload.array('images', 5));
 server.use(async (req, res, next) => {
   if (req.files) {
     try {
+      
       const imagePromises = req.files.map(async file => {
         const result = await cloudinary.uploader.upload('uploads/' + file.filename);
         return result.secure_url;

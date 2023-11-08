@@ -28,8 +28,6 @@ checkoutStripeRouter.post('/webhook', async (req, res) => {
     res.status(400).send('Error de firma de webhook');
     return;
   }
-
-  // Procesa el evento de webhook
   const eventHandler = webhookHandlers[eventData.type];
   if (eventHandler) {
     await eventHandler(eventData);

@@ -28,7 +28,7 @@ const postAccommodation = async (req, res) => {
       idLocation: newLocation,
       description,
       price,
-      isActive: req.body.isActive,
+      isActive: false,
     };
 
     
