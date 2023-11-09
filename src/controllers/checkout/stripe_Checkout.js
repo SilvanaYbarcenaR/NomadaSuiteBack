@@ -7,18 +7,16 @@ const createPayment = async (req, res) => {
 
         const baseUrl = process.env.APP_BASE_URL;
 
-        const updatedExtraInfo = {
-            ...extraInfo,
-            duration: duration
-        };
-
-        const success_url = `${baseUrl}api/stripe/success?line_items=${JSON.stringify(line_items)}&extraInfo=${JSON.stringify(updatedExtraInfo)}`;
+        const durationAsString = JSON.stringify(duration);
 
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: 'payment',
-            success_url:`${baseUrl}`, 
+            success_url: `${baseUrl}`, 
             cancel_url: `${baseUrl}`,
+            metadata: {
+                duration: durationAsString
+            }
         });
 
         return res.json({ id: session.id, url: session.url });

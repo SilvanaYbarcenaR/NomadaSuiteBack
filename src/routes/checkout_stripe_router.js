@@ -19,15 +19,13 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
 
   // Handle the event if it's a checkout.session.completed
   if (event.type === 'checkout.session.completed') {
-    const checkoutSession = event.data.object;
-    // Handle a completed checkout session
-    // handleCompletedCheckoutSession(checkoutSession);
-    console.log('Checkout Session ID:', checkoutSession.id);
-    // Aquí puedes realizar las acciones necesarias para un checkout completado
-  } else {
-    console.log(`Unhandled event type ${event.type}`);
-  }
+    const session = event.data.object;
 
+    // Access the metadata
+    const metadata = session.metadata;
+    console.log('Metadata:', metadata);
+    // Aquí puedes utilizar los metadatos para realizar acciones en tu aplicación
+  }
   // Respond to acknowledge receipt of the event
   response.json({ received: true });
 });
