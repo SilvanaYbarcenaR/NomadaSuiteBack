@@ -23,7 +23,7 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
     // Handle a completed checkout session
     // handleCompletedCheckoutSession(checkoutSession);
     console.log('Checkout Session ID:', checkoutSession.id);
-    const metadata = session.metadata;
+    const metadata = checkoutSession.metadata;
     console.log('Metadata:', metadata);
     // Aquí puedes realizar las acciones necesarias para un checkout completado
   } else {
