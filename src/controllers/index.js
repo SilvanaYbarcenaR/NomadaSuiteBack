@@ -26,6 +26,7 @@ const createPayment = require("./checkout/stripe_Checkout");
 const getUsersActives = require("./user/get_users_actives");
 const getReservations = require("./reservations/getReservations");
 const getUserReservations = require("./reservations/getUserReservations");
+const getUsersActivesFalse = require("./user/get_users_actives_false");
 
 module.exports = {
   getAccommodations,
@@ -55,4 +56,5 @@ module.exports = {
   getUsersActives,
   getReservations,
   getUserReservations,
+  getUsersActivesFalse,
 };
