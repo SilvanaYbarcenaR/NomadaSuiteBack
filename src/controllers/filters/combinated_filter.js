@@ -5,7 +5,7 @@ const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const combinatedFilter = async (req, res) => {
 
-    const { city, country, rooms, min, max, orderByPrice } = req.query;
+    const { city, country, rooms, min, max, orderByPrice, orderByRating } = req.query;
 
     try {
 
@@ -30,27 +30,29 @@ const combinatedFilter = async (req, res) => {
             return { ...accommodation._doc, rating: rating.averageRating };
         }));
 
-        const filteredAccommodations = accommodationsWithRatings.filter(accommodation => {
+        const filteredAccommodations = accommodationsWithRatings
+            .filter(accommodation => accommodation.isActive === true)
+            .filter(accommodation => {
 
-            let cityMatch = false;
+                let cityMatch = false;
 
-            if (accommodation.idLocation) {
-                const normalizedCity = normalizeText(city);
-                const normalizedLocationCity = normalizeText(accommodation.idLocation.city);
-                const normalizedLocationCountry = normalizeText(accommodation.idLocation.country);
+                if (accommodation.idLocation) {
+                    const normalizedCity = normalizeText(city);
+                    const normalizedLocationCity = normalizeText(accommodation.idLocation.city);
+                    const normalizedLocationCountry = normalizeText(accommodation.idLocation.country);
 
-                if (normalizedLocationCity.match(new RegExp(normalizedCity, 'i'))) {
-                    cityMatch = true;
-                } else if (!normalizedLocationCity.match(new RegExp(normalizedCity, 'i')) && normalizedLocationCountry.match(new RegExp(normalizedCity, 'i'))) {
-                    cityMatch = true;
+                    if (normalizedLocationCity.match(new RegExp(normalizedCity, 'i'))) {
+                        cityMatch = true;
+                    } else if (!normalizedLocationCity.match(new RegExp(normalizedCity, 'i')) && normalizedLocationCountry.match(new RegExp(normalizedCity, 'i'))) {
+                        cityMatch = true;
+                    }
                 }
-            }
 
-            const countryMatch = !country || (accommodation.idLocation && normalizeText(accommodation.idLocation.country).match(new RegExp(normalizeText(country), 'i')));
+                const countryMatch = !country || (accommodation.idLocation && normalizeText(accommodation.idLocation.country).match(new RegExp(normalizeText(country), 'i')));
 
-            return cityMatch && countryMatch;
+                return cityMatch && countryMatch;
 
-        })
+            })
             .map((accommodation) => {
                 const idServices = accommodation.idServices.filter((service) => {
                     const isBedroom = service.name === "Habitación";
@@ -78,6 +80,15 @@ const combinatedFilter = async (req, res) => {
                     return b.price - a.price;
                 } else if (orderByPrice === 'min-max') {
                     return a.price - b.price;
+                }
+
+                return 0;
+            })
+            .sort((a, b) => {
+                if (orderByRating === 'max-min') {
+                    return b.rating - a.rating;
+                } else if (orderByRating === 'min-max') {
+                    return a.rating - b.rating;
                 }
 
                 return 0;
