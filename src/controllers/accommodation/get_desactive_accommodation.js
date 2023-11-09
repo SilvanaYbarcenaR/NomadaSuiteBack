@@ -3,10 +3,11 @@ const Services = require('../../models/Services');
 const LocationAccommodation = require('../../models/LocationAccommodation');
 const getAverageReviews = require('../reviews/get_average_reviews'); 
 
-const getAccommodations = async (req, res) => {
+
+const getDesactiveAccommodations = async (req, res) => {
   try {
     const accommodations = await Accommodation
-      .find({ isActive: true })
+      .find({ isActive: false, __v: { $gt: 0 } }) 
       .populate('idServices')
       .populate('idLocation');
 
@@ -26,5 +27,4 @@ const getAccommodations = async (req, res) => {
   }
 };
 
-module.exports = getAccommodations;
-
+module.exports = getDesactiveAccommodations;

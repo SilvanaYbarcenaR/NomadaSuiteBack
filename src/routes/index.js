@@ -8,6 +8,7 @@ const { reviewsRouter } = require('./reviews_router');
 const { emailRouter } = require('./email_router');
 const checkoutStripeRouter  = require('./checkout_stripe_router');
 const reservationRouter = require('./reservation_router');
+const tokenRouter = require('./tokens_router');
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.use('/api/reviews', reviewsRouter);
 router.use('/api/email', emailRouter);
 router.use('/api/stripe', checkoutStripeRouter);
 router.use('/api/reservation', reservationRouter);
+router.use('/api/tokens', tokenRouter);
 
 router.use((req, res, next) => {
   console.log("Ruta no encontrada:", req.originalUrl);

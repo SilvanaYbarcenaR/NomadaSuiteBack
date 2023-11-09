@@ -1,6 +1,6 @@
 const data_services = [
   {
-    name: "Bedroom",
+    name: "Habitación",
     quantity: 1,
   },
   {
@@ -41,15 +41,15 @@ const data_services = [
     quantity: null,
   },
   {
-    name: "Bedroom",
+    name: "Habitación",
     quantity: 2,
   },
   {
-    name: "Bathroom",
+    name: "Habitación",
     quantity: 2,
   },
   {
-    name: "Bedroom",
+    name: "Habitación",
     quantity: 3,
   },
   {
@@ -57,11 +57,11 @@ const data_services = [
     quantity: 3,
   },
   {
-    name: "Bedroom",
+    name: "Habitación",
     quantity: 4,
   },
   {
-    name: "Bedroom",
+    name: "Habitación",
     quantity: 5,
   },
 ];
