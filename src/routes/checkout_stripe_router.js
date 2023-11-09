@@ -10,33 +10,29 @@ checkoutStripeRouter.post('/charge', createPayment);
 
 checkoutStripeRouter.use(express.json());
 
-checkoutStripeRouter.post('/webhook', async (req, res) => {
-  const signature = req.headers['stripe-signature'];
-  const event = req.body;
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' }), (request, response) => {
+  const event = request.body;
 
-  const eventData = req.body;
-
-
-  const isSignatureValid = stripe.webhooks.verifySignatureV2(
-    eventData,
-    signature,
-    secret
-  );
-
-  if (!isSignatureValid) {
-    res.status(400).send('Error de firma de webhook');
-    return;
-  }
-  const eventHandler = webhookHandlers[eventData.type];
-  if (eventHandler) {
-    await eventHandler(eventData);
-  } else {
-    res.status(404).send('Evento de webhook no reconocido');
-    return;
+  // Handle the event based on its type
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntent = event.data.object;
+      // Handle a successful payment intent
+      // handlePaymentIntentSucceeded(paymentIntent);
+      break;
+    case 'payment_method.attached':
+      const paymentMethod = event.data.object;
+      // Handle the successful attachment of a PaymentMethod
+      // handlePaymentMethodAttached(paymentMethod);
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
   }
 
-  res.status(200).send();
+  // Respond to acknowledge receipt of the event
+  response.json({ received: true });
 });
+
 
 module.exports = checkoutStripeRouter;
