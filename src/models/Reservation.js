@@ -48,6 +48,10 @@ const reservationSchema = new mongoose.Schema({
             },
             message: 'El precio total debe ser mayor o igual a cero'
         }
+    },
+    checkoutId: {
+        type: String, 
+        required: true
     }
 });
 
