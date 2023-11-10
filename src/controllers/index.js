@@ -25,8 +25,10 @@ const filteredByServices = require("./filters/filteredByServices");
 const sendEmail = require("./email/send_email");
 // const mercadoPagoController = require("./checkout/mercadoPago_checkout");
 const createPayment = require("./checkout/stripe_Checkout");
-const getReservations = require("../controllers/reservations/getReservations");
-const getUserReservations = require("../controllers/reservations/getUserReservations");
+const getUsersActives = require("./user/get_users_actives");
+const getReservations = require("./reservations/getReservations");
+const getUserReservations = require("./reservations/getUserReservations");
+const getUsersActivesFalse = require("./user/get_users_actives_false");
 
 module.exports = {
   getAccommodations,
@@ -55,6 +57,8 @@ module.exports = {
   filteredByServices,
   sendEmail,
   createPayment,
+  getUsersActives,
   getReservations,
   getUserReservations,
+  getUsersActivesFalse,
 };
