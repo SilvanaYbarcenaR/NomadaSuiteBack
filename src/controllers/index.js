@@ -27,6 +27,7 @@ const sendEmail = require("./email/send_email");
 const createPayment = require("./checkout/stripe_Checkout");
 const getUsersActives = require("./user/get_users_actives");
 const getReservations = require("./reservations/getReservations");
+const getReservationByCheckoutId = require("./reservations/get_reservation_checkoutId");
 const getUserReservations = require("./reservations/getUserReservations");
 const getUsersActivesFalse = require("./user/get_users_actives_false");
 
@@ -61,4 +62,5 @@ module.exports = {
   getReservations,
   getUserReservations,
   getUsersActivesFalse,
+  getReservationByCheckoutId
 };

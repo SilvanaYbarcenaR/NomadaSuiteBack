@@ -3,22 +3,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const createPayment = async (req, res) => {
     try {
-        const { line_items, duration, extraInfo } = req.body;
+        const { line_items, reservationDetails } = req.body;
 
         const baseUrl = process.env.APP_BASE_URL;
 
-        const updatedExtraInfo = {
-            ...extraInfo,
-            duration: duration
-        };
-
-        const success_url = `${baseUrl}api/stripe/success?line_items=${JSON.stringify(line_items)}&extraInfo=${JSON.stringify(updatedExtraInfo)}`;
+        const reservationDetailsAsString = JSON.stringify(reservationDetails);
 
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: 'payment',
-            success_url:`${baseUrl}`, 
+            success_url: `${baseUrl}`, 
             cancel_url: `${baseUrl}`,
+            metadata: {
+                reservationDetails: reservationDetailsAsString 
+            }
         });
 
         return res.json({ id: session.id, url: session.url });
@@ -28,4 +26,3 @@ const createPayment = async (req, res) => {
 };
 
 module.exports = createPayment;
-

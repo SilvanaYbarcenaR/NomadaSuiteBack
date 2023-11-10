@@ -39,13 +39,20 @@ const reservationSchema = new mongoose.Schema({
             message: 'La fecha de salida debe ser posterior a la fecha de entrada'
         }
     },
-    totalPrice: Number 
-});
-
-reservationSchema.pre('save', function (next) {
-    const monthsReserved = Math.ceil(this.daysReserved / 30); 
-    this.totalPrice = this.monthlyRate * monthsReserved; 
-    next();
+    totalPrice: {
+        type: Number,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value >= 0; 
+            },
+            message: 'El precio total debe ser mayor o igual a cero'
+        }
+    },
+    checkoutId: {
+        type: String, 
+        required: true
+    }
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema);
