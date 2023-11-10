@@ -5,6 +5,7 @@ const handlePaymentSuccess = require("../controllers/checkout/handle_sucess");
 const {
   getReservations,
   getUserReservations,
+  getReservationByCheckoutId,
 } = require("../controllers/index");
 
 reservationRouter.post("/sucess", handlePaymentSuccess);
@@ -41,5 +42,7 @@ reservationRouter.get("/disponibilidad/:accommodationId", async (req, res) => {
 
 reservationRouter.get("/", getReservations);
 reservationRouter.get("/:userId", getUserReservations);
+reservationRouter.get("/checkout/:checkoutId", getReservationByCheckoutId);
+
 
 module.exports = reservationRouter;
