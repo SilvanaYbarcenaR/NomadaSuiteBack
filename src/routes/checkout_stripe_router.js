@@ -11,7 +11,7 @@ checkoutStripeRouter.post('/charge', createPayment);
 
 checkoutStripeRouter.use(express.json());
 
-checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' }), (request, response) => {
+checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' }), async (request, response) => {
   const event = request.body;
 
   console.log('Información del evento recibido:');
@@ -23,39 +23,26 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
     const metadata = checkoutSession.metadata;
     console.log('Metadata:', metadata);
 
-    if (metadata && metadata.reservationDetails) {
+    try {
+      // Extrae reservationDetails del metadata y convierte el string JSON a un objeto
       const reservationDetails = JSON.parse(metadata.reservationDetails);
-      
-  
-      handlePaymentSuccessFromWebhook(reservationDetails);
-      
-      response.json({ received: true });
-    } else {
-      console.log('No se encontraron detalles de reserva en la metadata');
-      response.status(400).json({ error: 'No se encontraron detalles de reserva en la metadata' });
+
+      // Llama al controlador handlePaymentSuccess y pasa los detalles de la reserva
+      const result = await handlePaymentSuccess({ body: { reservationDetails } }, response);
+
+      // Devuelve la respuesta del controlador como respuesta al webhook
+      return result;
+    } catch (error) {
+      console.error('Error al procesar la reserva:', error);
+      return response.status(500).json({ message: 'Error al procesar la reserva' });
     }
   } else {
     console.log(`Unhandled event type ${event.type}`);
-    response.status(400).json({ error: 'Evento no manejado' });
   }
+
+  response.json({ received: true });
 });
 
-const handlePaymentSuccessFromWebhook = async (reservationDetails) => {
-  try {
-    const result = await handlePaymentSuccess({
-      body: {
-        reservationDetails 
-      }
-    }, {
-      json: (data) => console.log(data),
-      status: (code) => console.log(`Status code: ${code}`)
-    });
-
-    console.log('Resultado de handlePaymentSuccess:', result);
-  } catch (error) {
-    console.error('Error al ejecutar handlePaymentSuccess:', error);
-  }
-};
 
 
 module.exports = checkoutStripeRouter;
