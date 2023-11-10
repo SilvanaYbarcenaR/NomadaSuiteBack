@@ -37,7 +37,8 @@ const handlePaymentSuccess = async (req, res) => {
             monthlyRate: reservationDetails.monthlyRate,
             daysReserved: reservationDetails.daysReserved,
             startDate: reservationDetails.startDate, 
-            endDate: reservationDetails.endDate  
+            endDate: reservationDetails.endDate,
+            totalPrice: reservationDetails.totalPrice 
         });
 
         await newReservation.save();

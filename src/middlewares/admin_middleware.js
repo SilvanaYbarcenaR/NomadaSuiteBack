@@ -12,7 +12,7 @@ const extractIsAdmin = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(accessToken, secret);
-    req.isAdmin = decoded.isAdmin || false; // Si no existe isAdmin, se establece como false
+    req.isAdmin = decoded.isAdmin || false; 
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
