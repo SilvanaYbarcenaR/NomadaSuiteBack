@@ -24,13 +24,11 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
     console.log('Metadata:', metadata);
 
     try {
-      // Extrae reservationDetails del metadata y convierte el string JSON a un objeto
       const reservationDetails = JSON.parse(metadata.reservationDetails);
+      const checkoutId = checkoutSession.id; 
 
-      // Llama al controlador handlePaymentSuccess y pasa los detalles de la reserva
-      const result = await handlePaymentSuccess({ body: { reservationDetails } }, response);
+      const result = await handlePaymentSuccess({ body: { reservationDetails, checkoutId } }, response);
 
-      // Devuelve la respuesta del controlador como respuesta al webhook
       return result;
     } catch (error) {
       console.error('Error al procesar la reserva:', error);

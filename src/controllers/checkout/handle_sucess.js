@@ -2,7 +2,7 @@ const Reservation = require('../../models/Reservation');
 
 const handlePaymentSuccess = async (req, res) => {
     try {
-        const { reservationDetails } = req.body;
+        const { reservationDetails, checkoutId } = req.body;
 
         const conflictExists = await Reservation.exists({
             idAccommodation: reservationDetails.accommodationId,
@@ -38,7 +38,8 @@ const handlePaymentSuccess = async (req, res) => {
             daysReserved: reservationDetails.daysReserved,
             startDate: reservationDetails.startDate, 
             endDate: reservationDetails.endDate,
-            totalPrice: reservationDetails.totalPrice 
+            totalPrice: reservationDetails.totalPrice,
+            checkoutId: checkoutId 
         });
 
         await newReservation.save();
