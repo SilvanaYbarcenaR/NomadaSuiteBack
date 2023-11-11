@@ -10,6 +10,7 @@ const registerUser = async (req, res) => {
       password,
       birthdate,
       profileImage,
+      wantsNotifications,
       googleId,
     } = req.body;
 
@@ -32,12 +33,10 @@ const registerUser = async (req, res) => {
 
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
-      return res
-        .status(400)
-        .json({
-          error: "El correo electrónico ya está registrado",
-          userFound: existingEmail,
-        });
+      return res.status(400).json({
+        error: "El correo electrónico ya está registrado",
+        userFound: existingEmail,
+      });
     }
 
     let hashedPassword = null;
@@ -58,6 +57,7 @@ const registerUser = async (req, res) => {
       profileImage,
       isAdmin: false,
       isActive: true,
+      wantsNotifications,
       googleId,
     });
 
@@ -66,14 +66,12 @@ const registerUser = async (req, res) => {
     }
     await newUser.save();
 
-    res
-      .status(201)
-      .json({
-        message: "Usuario registrado con éxito",
-        userId: newUser._id,
-        generatedUserName: userName,
-        user: newUser,
-      });
+    res.status(201).json({
+      message: "Usuario registrado con éxito",
+      userId: newUser._id,
+      generatedUserName: userName,
+      user: newUser,
+    });
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: "No se pudo registrar el usuario" });
