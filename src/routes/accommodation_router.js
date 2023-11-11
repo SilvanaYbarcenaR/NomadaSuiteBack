@@ -7,10 +7,12 @@ const {
   deleteAccommodation,
   updateAccommodation,
   getDesactiveAccommodations,
-  getPendingAccommodations
+  getPendingAccommodations,
+  getAllAccommodations
 } = require("../controllers/index");
 
 accommodationRouter.get('/', getAccommodations);
+accommodationRouter.get('/all', getAllAccommodations);
 accommodationRouter.get('/desactive', getDesactiveAccommodations);
 accommodationRouter.get('/pending', getPendingAccommodations);
 accommodationRouter.post('/create', postAccommodation);
