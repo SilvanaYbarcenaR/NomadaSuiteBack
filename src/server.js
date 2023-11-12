@@ -41,6 +41,7 @@ const storage = multer.diskStorage({
   }
 });
 
+
 const upload = multer({ storage: storage });
 
 server.use(upload.array('images', 5));
