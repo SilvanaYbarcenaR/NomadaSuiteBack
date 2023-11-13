@@ -7,6 +7,8 @@ const combinatedFilter = async (req, res) => {
 
     const { city, country, rooms, min, max, orderByPrice, orderByRating } = req.query;
 
+    let responseSent = false;
+
     try {
 
         function normalizeText(text) {
@@ -95,14 +97,19 @@ const combinatedFilter = async (req, res) => {
             })
 
         if (filteredAccommodations.length === 0) {
+            responseSent = true;
             res.status(404).json({ message: 'Los parámetros indicados no corresponden a ningún alojamiento' })
         }
 
-        res.status(200).json(filteredAccommodations);
+        if (!responseSent) {
+            res.status(200).json(filteredAccommodations);
+        }
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error en el servidor' });
+        if (!responseSent) {
+            res.status(500).json({ error: 'Ha ocurrido un error en el servidor' });
+        }
     }
 }
 
