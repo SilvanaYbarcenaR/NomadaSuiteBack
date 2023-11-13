@@ -1,5 +1,6 @@
 const getAccommodations = require("./accommodation/get_accommodation");
 const getAllAccommodations = require("./accommodation/get_all_accommodation");
+const getAllAccommodationsByUser = require("./accommodation/get_all_accommodation_by_userId");
 const getDesactiveAccommodations = require("./accommodation/get_desactive_accommodation");
 const getPendingAccommodations = require("./accommodation/get_pending_accommodation");
 const getAccommodationById = require("./accommodation/get_accommodations_by_id");
@@ -37,6 +38,7 @@ module.exports = {
   getAllAccommodations,
   getDesactiveAccommodations,
   getPendingAccommodations,
+  getAllAccommodationsByUser,
   postAccommodation,
   getAccommodationById,
   deleteAccommodation,

@@ -10,7 +10,7 @@ const {
 
 reservationRouter.post("/sucess", handlePaymentSuccess);
 
-reservationRouter.get("/disponibilidad/:accommodationId", async (req, res) => {
+reservationRouter.get("/disponibility/:accommodationId", async (req, res) => {
   try {
     const { accommodationId } = req.params;
 
