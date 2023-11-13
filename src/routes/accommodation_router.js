@@ -8,11 +8,13 @@ const {
   updateAccommodation,
   getDesactiveAccommodations,
   getPendingAccommodations,
-  getAllAccommodations
+  getAllAccommodations,
+  getAllAccommodationsByUser
 } = require("../controllers/index");
 
 accommodationRouter.get('/', getAccommodations);
 accommodationRouter.get('/all', getAllAccommodations);
+accommodationRouter.get('/user/:ownerId', getAllAccommodationsByUser);
 accommodationRouter.get('/desactive', getDesactiveAccommodations);
 accommodationRouter.get('/pending', getPendingAccommodations);
 accommodationRouter.post('/create', postAccommodation);
