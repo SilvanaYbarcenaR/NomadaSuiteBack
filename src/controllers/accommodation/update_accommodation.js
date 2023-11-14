@@ -25,4 +25,3 @@ const updateAccommodation = async (req, res) => {
 };
 
 module.exports = updateAccommodation;
-
