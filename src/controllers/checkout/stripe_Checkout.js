@@ -2,8 +2,7 @@ const Stripe = require('stripe');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const createPayment = async (req, res) => {
-    let session; // Declarar la variable fuera del bloque try
-
+    let session; 
     try {
         const { line_items, reservationDetails } = req.body;
 
@@ -18,7 +17,10 @@ const createPayment = async (req, res) => {
             cancel_url: `${baseUrl}`,
             metadata: {
                 reservationDetails: reservationDetailsAsString 
-            }
+            },
+            payment_intent_data: {
+                application_fee_amount: 1000, 
+            },
         });
 
         return res.json({ id: session.id, url: session.url });

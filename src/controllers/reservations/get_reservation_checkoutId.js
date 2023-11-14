@@ -11,7 +11,6 @@ const getReservationByCheckoutId = async (req, res) => {
       return res.status(404).json({ message: 'Reserva no encontrada' });
     }
 
-    // Obtener información de facturación correspondiente al checkoutId
     const billingInfo = await BillingInfo.findOne({ 'checkout_session.id': checkoutId });
 
     return res.json({ reservation, billingInfo });

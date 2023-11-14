@@ -27,7 +27,6 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
       const reservationDetails = JSON.parse(metadata.reservationDetails);
       const checkoutId = checkoutSession.id;
 
-      // Acceder a la información específica de checkout.session, incluyendo el método de pago
       const billingInfo = {
         event_id: event.id,
         created: new Date(event.created * 1000),
