@@ -1,11 +1,12 @@
 const Accommodation = require("../../models/Accommodation");
 const getAverageReviews = require('../reviews/get_average_reviews');
+const Reservation = require("../../models/Reservation");
 const Services = require('../../models/Services');
 const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const combinatedFilter = async (req, res) => {
 
-    const { city, country, rooms, min, max, orderByPrice, orderByRating } = req.query;
+    const { city, country, rooms, min, max, orderByPrice, orderByRating, startDate, endDate } = req.query;
 
     let responseSent = false;
 
@@ -22,6 +23,8 @@ const combinatedFilter = async (req, res) => {
             .find()
             .populate('idLocation')
             .populate('idServices');
+        
+        const reservations = await Reservation.find();
 
         const accommodationsWithRatings = await Promise.all(locationsAccommodation.map(async (accommodation) => {
             const { _id: accommodationId } = accommodation;
@@ -31,6 +34,19 @@ const combinatedFilter = async (req, res) => {
 
             return { ...accommodation._doc, rating: rating.averageRating };
         }));
+
+        const filteredReservations = (startDate && endDate) ? reservations.filter((reservation) => {
+            const reservationStartDate = new Date(reservation.startDate);
+            const reservationEndDate = new Date(reservation.endDate);
+
+            const filterStartDate = new Date(startDate);
+            const filterEndDate = new Date(endDate);
+
+            return (
+                reservationStartDate >= filterStartDate &&
+                reservationEndDate <= filterEndDate
+            );
+        }) : reservations;
 
         const filteredAccommodations = accommodationsWithRatings
             .filter(accommodation => accommodation.isActive === true)
@@ -77,6 +93,10 @@ const combinatedFilter = async (req, res) => {
                     return priceMatch;
                 }
             )
+            .filter((accommodation) => {
+                // Filtrar acomodaciones solo si hay reservaciones filtradas
+                return (!startDate || !endDate) || filteredReservations.some(reservation => reservation.idAccommodation.toString() === accommodation._id.toString());
+            })
             .sort((a, b) => {
                 if (orderByPrice === 'max-min') {
                     return b.price - a.price;
