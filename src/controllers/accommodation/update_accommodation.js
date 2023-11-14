@@ -3,16 +3,15 @@ const Accommodation = require("../../models/Accommodation");
 const updateAccommodation = async (req, res) => {
   const id = req.params.id;
   try {
-
     const existingAccommodation = await Accommodation.findById(id);
-    const currentVersion = existingAccommodation._v;
 
-    // Incrementar la versión en 1
-    const updatedVersion = currentVersion + 1;
+    if (!existingAccommodation) {
+      return res.status(404).json({ error: "Accommodation not found" });
+    }
 
     const updatedAccommodation = await Accommodation.findOneAndUpdate(
       { _id: id },
-      { $inc: { __v: 1 }, $set: { ...req.body, _v: updatedVersion } },
+      { $inc: { __v: 1 }, $set: req.body }, 
       { new: true, useFindAndModify: false }
     );
 
@@ -27,5 +26,3 @@ const updateAccommodation = async (req, res) => {
 
 module.exports = updateAccommodation;
 
-
-module.exports = updateAccommodation;
