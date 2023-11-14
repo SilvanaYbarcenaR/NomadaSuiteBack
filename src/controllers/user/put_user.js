@@ -1,4 +1,5 @@
 const User = require('../../models/User');
+const bcrypt = require("bcrypt");
 
 const updateUser = async (req, res) => {
   try {
@@ -15,6 +16,14 @@ const updateUser = async (req, res) => {
 
     if (newImage) {
       userData.profileImage = newImage; 
+    }
+
+    const password = req.body.password;
+    let hashedPassword = null;
+
+    if(password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+      userData.password = hashedPassword; 
     }
 
     user.set(userData);
