@@ -18,20 +18,19 @@ reservationRouter.get("/disponibility/:accommodationId", async (req, res) => {
       idAccommodation: accommodationId,
     });
 
-    const availability = {};
+    const unavailableRanges = [];
 
     reservations.forEach((reservation) => {
       const start = new Date(reservation.startDate);
       const end = new Date(reservation.endDate);
-      const currentDate = new Date(start);
 
-      while (currentDate <= end) {
-        availability[currentDate.toISOString().split("T")[0]] = false;
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
+      unavailableRanges.push({
+        start: start.toISOString().split("T")[0],
+        end: end.toISOString().split("T")[0],
+      });
     });
 
-    return res.json({ availability });
+    return res.json({ unavailableRanges });
   } catch (error) {
     return res.status(500).json({
       message: "Error al obtener la disponibilidad",
