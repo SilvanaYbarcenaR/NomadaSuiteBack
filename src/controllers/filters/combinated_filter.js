@@ -5,7 +5,7 @@ const LocationAccommodation = require('../../models/LocationAccommodation');
 
 const combinatedFilter = async (req, res) => {
 
-    const { city, country, rooms, min, max, orderByPrice, orderByRating } = req.query;
+    const { city, country, rooms, min, max, orderByPrice, orderByRating, startDate, endDate } = req.query;
 
     let responseSent = false;
 
