@@ -27,7 +27,6 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
       const reservationDetails = JSON.parse(metadata.reservationDetails);
       const checkoutId = checkoutSession.id;
 
-      // Asignar directamente el fee al objeto billingInfoData
       const billingInfoData = {
         event_id: event.id,
         created: new Date(event.created * 1000),
@@ -40,7 +39,7 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
           payment_status: checkoutSession.payment_status,
           total_details: checkoutSession.total_details,
           payment_method_types: checkoutSession.payment_method_types,
-          fee: Math.round(checkoutSession.amount_total * 0.2), // Calcula y asigna el fee
+          fee: Math.round(checkoutSession.amount_total * 0.2), 
         },
         livemode: event.livemode,
         type: event.type,
@@ -66,7 +65,6 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
 
   response.json({ received: true });
 });
-
 
 
 
