@@ -11,15 +11,13 @@ const createPayment = async (req, res) => {
         const reservationDetailsAsString = JSON.stringify(reservationDetails);
 
         session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
             line_items: line_items,
             mode: 'payment',
             success_url: `${baseUrl}/{CHECKOUT_SESSION_ID}`,
             cancel_url: `${baseUrl}`,
             metadata: {
                 reservationDetails: reservationDetailsAsString 
-            },
-            payment_intent_data: {
-                application_fee_amount: 1000, 
             },
         });
 

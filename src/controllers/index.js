@@ -18,6 +18,8 @@ const filterLocation = require("./filters/filter_location");
 const filteredByBedrooms = require("./filters/filteredByBedrooms");
 const loginUser = require("./user/login_user");
 const getAllReviews = require("./reviews/get_reviews");
+const getDesactiveReviews = require("./reviews/get_desactive_review");
+const getPendingReviews = require("./reviews/get_pending_review");
 const createReview = require("./reviews/post_review");
 const deleteReview = require("./reviews/delete_review");
 const updateReview = require("./reviews/update_review");
@@ -32,6 +34,7 @@ const getReservations = require("./reservations/getReservations");
 const getReservationByCheckoutId = require("./reservations/get_reservation_checkoutId");
 const getUserReservations = require("./reservations/getUserReservations");
 const getUsersActivesFalse = require("./user/get_users_actives_false");
+const getMonthlyBookingStats = require("./statistics/reservation_statistics");
 
 module.exports = {
   getAccommodations,
@@ -66,5 +69,8 @@ module.exports = {
   getReservations,
   getUserReservations,
   getUsersActivesFalse,
-  getReservationByCheckoutId
+  getReservationByCheckoutId,
+  getDesactiveReviews,
+  getPendingReviews,
+  getMonthlyBookingStats
 };

@@ -3,9 +3,9 @@ const User = require('../../models/User');
 const Accommodation = require('../../models/Accommodation'); 
 
 const createReview = async (req, res) => {
-    const { idUser, idAccommodation, comment, rating, isActive } = req.body;
+    const { idUser, idAccommodation, comment, rating } = req.body;
 
-    if (!idUser || !idAccommodation || !comment || !rating || isActive === undefined) {
+    if (!idUser || !idAccommodation || !comment || !rating) {
         return res.status(400).json({ error: 'Se requiere toda la información para crear la revisión' });
     }
 
@@ -22,7 +22,7 @@ const createReview = async (req, res) => {
             idAccommodation,
             comment,
             rating,
-            isActive: isActive || true,
+            isActive: false, 
         });
 
         await newReview.save();
