@@ -25,6 +25,7 @@ const billingInfoSchema = new mongoose.Schema({
   },
   livemode: Boolean,
   type: String,
+  fee: Number
 });
 
 const BillingInfo = mongoose.model('BillingInfo', billingInfoSchema);
