@@ -39,7 +39,6 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
           payment_status: checkoutSession.payment_status,
           total_details: checkoutSession.total_details,
           payment_method_types: checkoutSession.payment_method_types,
-          fee: Math.round(checkoutSession.amount_total * 0.2), 
         },
         livemode: event.livemode,
         type: event.type,

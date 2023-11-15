@@ -1,14 +1,16 @@
 const BillingInfo = require('../../models/BillingInfo');
 const Reservation = require('../../models/Reservation');
 
-
 const saveBillingInfo = async (req) => {
   try {
-    const billingInfoData = req.billingInfo;
-    return await BillingInfo.create(billingInfoData);
+      const billingInfoData = req.billingInfo;
+
+      billingInfoData.fee = Math.round(billingInfoData.checkout_session.amount_total * 0.2);
+
+      return await BillingInfo.create(billingInfoData);
   } catch (error) {
-    console.error('Error al guardar la información de facturación:', error);
-    throw new Error('Error al guardar la información de facturación en la base de datos');
+      console.error('Error al guardar la información de facturación:', error);
+      throw new Error('Error al guardar la información de facturación en la base de datos');
   }
 };
 
