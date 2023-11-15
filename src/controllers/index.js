@@ -35,6 +35,8 @@ const getReservationByCheckoutId = require("./reservations/get_reservation_check
 const getUserReservations = require("./reservations/getUserReservations");
 const getUsersActivesFalse = require("./user/get_users_actives_false");
 const getMonthlyBookingStats = require("./statistics/reservation_statistics");
+const getUsersStatistics = require("./statistics/user_statistics");
+
 
 module.exports = {
   getAccommodations,
@@ -72,5 +74,6 @@ module.exports = {
   getReservationByCheckoutId,
   getDesactiveReviews,
   getPendingReviews,
-  getMonthlyBookingStats
+  getMonthlyBookingStats,
+  getUsersStatistics
 };
