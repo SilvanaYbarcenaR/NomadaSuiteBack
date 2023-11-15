@@ -23,8 +23,8 @@ const getAccomodationsStatistics = async (req, res) => {
     );
 
     const response = [
-      { name: "Alojamiento activo", value: percentageActive },
-      { name: "Alojamiento inactivo", value: percentageInactive },
+      { name: "Alojamientos activos", value: percentageActive },
+      { name: "Alojamientos inactivos", value: percentageInactive },
     ];
 
     res.status(200).json(response);
