@@ -25,17 +25,41 @@ checkoutStripeRouter.post('/webhook', express.json({ type: 'application/json' })
 
     try {
       const reservationDetails = JSON.parse(metadata.reservationDetails);
-      const checkoutId = checkoutSession.id; 
+      const checkoutId = checkoutSession.id;
 
-      const result = await handlePaymentSuccess({ body: { reservationDetails, checkoutId } }, response);
+      const billingInfoData = {
+        event_id: event.id,
+        created: new Date(event.created * 1000),
+        checkout_session: {
+          id: checkoutSession.id,
+          amount_subtotal: checkoutSession.amount_subtotal,
+          amount_total: checkoutSession.amount_total,
+          currency: checkoutSession.currency,
+          customer_details: checkoutSession.customer_details,
+          payment_status: checkoutSession.payment_status,
+          total_details: checkoutSession.total_details,
+          payment_method_types: checkoutSession.payment_method_types,
+        },
+        livemode: event.livemode,
+        type: event.type,
+      };
+
+      const result = await handlePaymentSuccess({
+        body: {
+          reservationDetails,
+          checkoutId,
+          billingInfo: billingInfoData,
+        },
+      }, response);
 
       return result;
     } catch (error) {
       console.error('Error al procesar la reserva:', error);
-      return response.status(500).json({ message: 'Error al procesar la reserva' });
+      return response.status(500).json({ message: 'Error al procesar la reserva', error: error.message });
     }
   } else {
     console.log(`Unhandled event type ${event.type}`);
+    return response.status(400).json({ message: `Unhandled event type ${event.type}` });
   }
 
   response.json({ received: true });

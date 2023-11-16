@@ -5,7 +5,17 @@ const updateReview = async (req, res) => {
   const updateData = req.body; 
 
   try {
-    const updatedReview = await Reviews.findByIdAndUpdate(reviewId, updateData, { new: true }).exec();
+    const existingReview = await Reviews.findById(reviewId);
+
+    if (!existingReview) {
+      return res.status(404).json({ error: 'Revisión no encontrada' });
+    }
+
+    const updatedReview = await Reviews.findOneAndUpdate(
+      { _id: reviewId },
+      { $inc: { __v: 1 }, $set: updateData }, 
+      { new: true, useFindAndModify: false }
+    );
 
     if (!updatedReview) {
       return res.status(404).json({ error: 'Revisión no encontrada' });
@@ -18,5 +28,4 @@ const updateReview = async (req, res) => {
   }
 };
 
-module.exports = updateReview
-
+module.exports = updateReview;

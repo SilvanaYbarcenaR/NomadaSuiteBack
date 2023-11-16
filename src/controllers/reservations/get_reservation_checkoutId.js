@@ -1,5 +1,5 @@
 const Reservation = require("../../models/Reservation");
-
+const BillingInfo = require("../../models/BillingInfo");
 
 const getReservationByCheckoutId = async (req, res) => {
   try {
@@ -11,10 +11,12 @@ const getReservationByCheckoutId = async (req, res) => {
       return res.status(404).json({ message: 'Reserva no encontrada' });
     }
 
-    return res.json({ reservation });
+    const billingInfo = await BillingInfo.findOne({ 'checkout_session.id': checkoutId });
+
+    return res.json({ reservation, billingInfo });
   } catch (error) {
     return res.status(500).json({ message: 'Error al obtener la reserva', error: error.message });
   }
 };
 
-module.exports =  getReservationByCheckoutId 
+module.exports = getReservationByCheckoutId;

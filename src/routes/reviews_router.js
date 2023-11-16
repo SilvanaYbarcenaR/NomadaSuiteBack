@@ -5,10 +5,14 @@ const {
   createReview,
   deleteReview,
   updateReview,
-  getAllReviewsByAccommodationId
+  getAllReviewsByAccommodationId,
+  getDesactiveReviews,
+  getPendingReviews
 } = require("../controllers/index");
 
 reviewsRouter.get('/', getAllReviews);
+reviewsRouter.get('/desactive', getDesactiveReviews);
+reviewsRouter.get('/pending', getPendingReviews);
 reviewsRouter.post('/create', createReview);
 reviewsRouter.delete('/delete/:id', deleteReview); 
 reviewsRouter.put('/update/:id', updateReview); 

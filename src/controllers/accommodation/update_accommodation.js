@@ -9,9 +9,17 @@ const updateAccommodation = async (req, res) => {
       return res.status(404).json({ error: "Accommodation not found" });
     }
 
+    const updatedAccommodationData = req.body;
+
+    // Verificar si se proporcionaron nuevas imágenes
+    if (req.imageURLs) {
+      const newPhotos = Array.isArray(req.imageURLs) ? req.imageURLs : [req.imageURLs];
+      updatedAccommodationData.photos = newPhotos;
+    }
+
     const updatedAccommodation = await Accommodation.findOneAndUpdate(
       { _id: id },
-      { $inc: { __v: 1 }, $set: req.body }, 
+      { $inc: { __v: 1 }, $set: updatedAccommodationData },
       { new: true, useFindAndModify: false }
     );
 
@@ -25,5 +33,3 @@ const updateAccommodation = async (req, res) => {
 };
 
 module.exports = updateAccommodation;
-
-

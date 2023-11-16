@@ -4,6 +4,7 @@ const getAllAccommodationsByUser = require("./accommodation/get_all_accommodatio
 const getDesactiveAccommodations = require("./accommodation/get_desactive_accommodation");
 const getPendingAccommodations = require("./accommodation/get_pending_accommodation");
 const getAccommodationById = require("./accommodation/get_accommodations_by_id");
+const getAccommodationsStatistics = require("./statistics/accommodations_statistics");
 const postAccommodation = require("./accommodation/post_accommodations");
 const deleteAccommodation = require("./accommodation/delete_accommodation");
 const updateAccommodation = require("./accommodation/update_accommodation");
@@ -18,6 +19,8 @@ const filterLocation = require("./filters/filter_location");
 const filteredByBedrooms = require("./filters/filteredByBedrooms");
 const loginUser = require("./user/login_user");
 const getAllReviews = require("./reviews/get_reviews");
+const getDesactiveReviews = require("./reviews/get_desactive_review");
+const getPendingReviews = require("./reviews/get_pending_review");
 const createReview = require("./reviews/post_review");
 const deleteReview = require("./reviews/delete_review");
 const updateReview = require("./reviews/update_review");
@@ -32,6 +35,10 @@ const getReservations = require("./reservations/getReservations");
 const getReservationByCheckoutId = require("./reservations/get_reservation_checkoutId");
 const getUserReservations = require("./reservations/getUserReservations");
 const getUsersActivesFalse = require("./user/get_users_actives_false");
+const getMonthlyBookingStats = require("./statistics/reservation_statistics");
+const getUsersStatistics = require("./statistics/user_statistics");
+const getRatingStatistics = require("./statistics/reviews_statistics");
+
 
 module.exports = {
   getAccommodations,
@@ -41,6 +48,7 @@ module.exports = {
   getAllAccommodationsByUser,
   postAccommodation,
   getAccommodationById,
+  getAccommodationsStatistics,
   deleteAccommodation,
   updateAccommodation,
   getServices,
@@ -66,5 +74,10 @@ module.exports = {
   getReservations,
   getUserReservations,
   getUsersActivesFalse,
-  getReservationByCheckoutId
+  getReservationByCheckoutId,
+  getDesactiveReviews,
+  getPendingReviews,
+  getMonthlyBookingStats,
+  getUsersStatistics,
+  getRatingStatistics
 };
