@@ -10,20 +10,16 @@ const updateAccommodation = async (req, res) => {
       return res.status(404).json({ error: "Accommodation not found" });
     }
 
-    // Crear un objeto de actualización dinámico
     const updateFields = {};
-    
-    // Verificar si se proporciona el campo 'services' en el cuerpo de la solicitud
+
     if (req.body.services) {
-      // Obtener los datos de servicios usando los IDs proporcionados en 'services'
+
       const selectedServices = req.body.services;
       const servicesData = await Services.find({ _id: { $in: selectedServices } });
 
-      // Asignar los valores a 'idServices' en el modelo 'Accommodation'
       updateFields.idServices = servicesData;
     }
 
-    // Verificar si se proporciona el campo 'imageURLs' en el cuerpo de la solicitud
     if (req.body.imageURLs) {
       const newPhotos = Array.isArray(req.body.imageURLs) ? req.body.imageURLs : [req.body.imageURLs];
       updateFields.photos = newPhotos;
