@@ -9,7 +9,8 @@ const getMonthlyBookingStats = async (req, res) => {
         allBillingInfo.forEach(billing => {
             const createdDate = new Date(billing.created);
             const year = createdDate.getFullYear();
-            const month = createdDate.toLocaleString('en-US', { month: 'long' });
+            
+            const month = createdDate.toLocaleString('es-ES', { month: 'long' });
 
             const key = `${year}-${month}`;
         
@@ -24,6 +25,12 @@ const getMonthlyBookingStats = async (req, res) => {
             yearMonth: key,
             value: monthlyStats[key],
         }));
+
+        data.sort((a, b) => {
+            const dateA = new Date(a.yearMonth);
+            const dateB = new Date(b.yearMonth);
+            return dateA - dateB;
+        });
 
         res.json(data);
     } catch (error) {

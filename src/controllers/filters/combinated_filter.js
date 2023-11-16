@@ -43,8 +43,8 @@ const combinatedFilter = async (req, res) => {
             const filterEndDate = new Date(endDate);
 
             return (
-                reservationStartDate >= filterStartDate &&
-                reservationEndDate <= filterEndDate
+                (reservationStartDate >= filterEndDate) || // No hay solapamiento en la fecha de inicio
+                (reservationEndDate <= filterStartDate)    // No hay solapamiento en la fecha de fin
             );
         }) : reservations;
 
@@ -95,7 +95,7 @@ const combinatedFilter = async (req, res) => {
             )
             .filter((accommodation) => {
                 // Filtrar acomodaciones solo si hay reservaciones filtradas
-                return (!startDate || !endDate) || filteredReservations.some(reservation => reservation.idAccommodation.toString() === accommodation._id.toString());
+                return (!startDate || !endDate) || filteredReservations.every(reservation => reservation.idAccommodation.toString() !== accommodation._id.toString());
             })
             .sort((a, b) => {
                 if (orderByPrice === 'max-min') {
