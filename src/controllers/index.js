@@ -37,6 +37,7 @@ const getUserReservations = require("./reservations/getUserReservations");
 const getUsersActivesFalse = require("./user/get_users_actives_false");
 const getMonthlyBookingStats = require("./statistics/reservation_statistics");
 const getUsersStatistics = require("./statistics/user_statistics");
+const getRatingStatistics = require("./statistics/reviews_statistics");
 
 
 module.exports = {
@@ -77,5 +78,6 @@ module.exports = {
   getDesactiveReviews,
   getPendingReviews,
   getMonthlyBookingStats,
-  getUsersStatistics
+  getUsersStatistics,
+  getRatingStatistics
 };
